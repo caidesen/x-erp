@@ -1,0 +1,19 @@
+{
+  "name": "trpc-admin",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+		"dev:server": "pnpm --filter @trpc-admin/server start",
+		"dev:admin": "pnpm --filter @trpc-admin/admin start",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "eslint": "^8.38.0",
+    "prettier": "^2.8.7",
+    "typescript": "^5.0.4"
+  }
+}

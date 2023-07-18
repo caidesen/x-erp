@@ -1,0 +1,25 @@
+{
+  "compilerOptions": {
+    "lib": ["esnext"],
+    "target": "esnext",
+    "composite": true,
+    "allowJs": true,
+    "checkJs": true,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "esModuleInterop": true,
+    "module": "esnext",
+    "moduleResolution": "node",
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "incremental": true,
+    "declaration": true,
+    "noUncheckedIndexedAccess": true,
+    "baseUrl": ".",
+    "rootDir": "./src",
+    "outDir": "./dist/types",
+  },
+  "include": ["src/**/*", "db"],
+  "exclude": ["node_modules"]
+}

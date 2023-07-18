@@ -1,0 +1,94 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int        @id @default(autoincrement())
+  nickname  String		 @unique
+  avatar    String     @default("")
+  account   Account?
+  createdAt DateTime   @default(now())
+  updatedAt DateTime   @updatedAt
+  blocked   Boolean    @default(false)
+  roles     Role[]
+  Customer  Customer[]
+  Supplier  Supplier[]
+}
+
+model Account {
+  id        Int      @id @default(autoincrement())
+  userId    Int      @unique
+  user      User     @relation(fields: [userId], references: [id])
+  username  String?  @unique
+  phone     String?  @unique
+  password  String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Role {
+  id          Int      @id @default(autoincrement())
+  name        String
+  remark      String?
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+  permissions String[]
+  users       User[]
+}
+
+model Customer {
+  id                   Int      @id @default(autoincrement())
+  fullName             String
+  shortName            String
+  property             String
+  region               String
+  // 绑定客户负责人
+  personInChargeUserId Int?
+  personInChargeUser   User?    @relation(fields: [personInChargeUserId], references: [id])
+  contactInfo          String
+  contactName          String
+  address              String
+  remarks              String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+model Supplier {
+  id                   Int      @id @default(autoincrement())
+  fullName             String
+  shortName            String
+  property             String
+  region               String
+  // 绑定供应商负责人
+  personInChargeUserId Int?
+  personInChargeUser   User?    @relation(fields: [personInChargeUserId], references: [id])
+  contactInfo          String
+  contactName          String
+  address              String
+  remarks              String?
+  createdAt            DateTime @default(now())
+  updatedAt            DateTime @updatedAt
+}
+
+enum FileFrom {
+  Local
+}
+
+model File {
+  id        Int      @id @default(autoincrement())
+  name      String
+  from      FileFrom
+  content   String
+  occupied  Boolean  @default(false)
+  remark    String?
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
