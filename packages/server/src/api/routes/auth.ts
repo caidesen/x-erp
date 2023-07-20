@@ -1,10 +1,13 @@
 import { z } from "zod";
 import { router } from "../../trpc";
 import { db } from "../../shared/db";
-import { comparePassword, hashPassword } from "../../service/auth";
+import {
+	comparePassword,
+	getUserPermissions,
+	hashPassword,
+} from "../../service/auth";
 import { createSession, resetSession } from "../../shared/session";
 import { privateProcedure, publicProcedure } from "../../trpc";
-import { occupyFile, unOccupyFile } from "../../service/file";
 import { newInputError } from "../../shared/error";
 
 export const authApi = router({
@@ -48,7 +51,11 @@ export const authApi = router({
 			where: { id: ctx.session.userId },
 		});
 		if (!user) throw newInputError("用户不存在");
-		return user;
+		const permissions = await getUserPermissions(ctx.session.userId);
+		return {
+			...user,
+			permissions,
+		};
 	}),
 	updateUserInfo: privateProcedure
 		.input(z.object({ nickname: z.string() }).partial())

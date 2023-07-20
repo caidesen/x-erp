@@ -3,7 +3,6 @@ import {
   ModalForm,
   PageContainer,
   ProFormGroup,
-  ProFormSelect,
   ProFormText,
   ProFormTextArea,
   ProTable,
@@ -14,6 +13,7 @@ import { RpcInput, RpcOutput } from "@trpc-admin/server";
 import React, { useState } from "react";
 import * as _ from "lodash";
 import { CustomerImportModal } from "./components/CustomerImportModal";
+import { ProFormUserSelector, useUserOptions } from "@/shared/components/UserSelector";
 
 const rules = {
   fullName: [
@@ -28,16 +28,7 @@ const rules = {
   contactName: [{ max: 20, message: "联系人最大长度为20" }],
   remark: [{ max: 200, message: "备注最大长度为200" }],
 };
-function useUserOptions() {
-  const { data } = trpc.system.user.list.useQuery({
-    pageSize: 99,
-  });
-  return (
-    data?.data.map((item) => ({ label: item.nickname, value: item.id })) ?? []
-  );
-}
 function FormItems() {
-  const userOptions = useUserOptions();
   return (
     <>
       <ProFormGroup>
@@ -56,14 +47,11 @@ function FormItems() {
           rules={rules.shortName}
         />
       </ProFormGroup>
-      <ProFormSelect
+      <ProFormUserSelector
         width="md"
         name="personInChargeUserId"
         label="客户负责人"
         placeholder="请选择客户负责人"
-        fieldProps={{
-          options: userOptions,
-        }}
       />
       <ProFormText
         width="md"
@@ -124,17 +112,6 @@ export function Component() {
         actionRef={actionRef}
         rowKey="id"
         scroll={{ x: 1000 }}
-        // editable={{
-        //   type: "multiple",
-        // onSave: async (rowKey, data, row) => {
-        //   await updateUser(
-        //     _.pick(data, ["id", "nickname", "username", "roles"])
-        //   );
-        // },
-        //   onDelete: async (rowKey, data) => {
-        //     await deleteUsers([data.id]);
-        //   },
-        // }}
         columns={[
           {
             dataIndex: "shortName",
@@ -148,13 +125,9 @@ export function Component() {
             width: 200,
           },
           {
-            dataIndex: "personInChargeUserId",
+            dataIndex: ["personInChargeUser","nickname"],
             title: "客户负责人",
             width: 200,
-            valueType: "select",
-            fieldProps: {
-              options: userOptions,
-            },
           },
           {
             dataIndex: "property",
@@ -265,7 +238,10 @@ export function Component() {
           );
         }}
         toolBarRender={() => [
-          <CustomerImportModal key="import" onImportSuccess={() => actionRef.current?.reload()}/>,
+          <CustomerImportModal
+            key="import"
+            onImportSuccess={() => actionRef.current?.reload()}
+          />,
           <Button
             key="export"
             onClick={() =>

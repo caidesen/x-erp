@@ -4,7 +4,7 @@ export interface FixedPermission {
 	remark?: string;
 }
 
-type PermissionKey = keyof typeof fixedPermissions;
+export type PermissionKey = keyof typeof fixedPermissions;
 export function createAuthMeta(...permissions: PermissionKey[]) {
 	return {
 		permissions,

@@ -1,11 +1,12 @@
-import React, { useState } from "react";
-import "./App.css";
-import { routes } from "@/route";
-import { useRoutes } from "react-router-dom";
-import { TRPCProvider } from "@/shared";
+import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+	useFilteredRoutes,
+} from "./route";
+import { useMemo } from "react";
+import _ from "lodash";
 
-function App() {
-  return <>{useRoutes(routes)}</>;
+export default function App() {
+	const routes = useFilteredRoutes();
+	const router = useMemo(() => createBrowserRouter(routes), [routes]);
+	return <RouterProvider router={router} />;
 }
-
-export default App;
