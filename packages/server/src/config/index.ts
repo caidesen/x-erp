@@ -17,7 +17,7 @@ const config: appConfig = {
   hashIdSalt: process.env.HASH_ID_SALT || "00xx11",
   redisHost: process.env.REDIS_HOST || "localhost",
   redisPort: process.env.REDIS_PORT ? +process.env.REDIS_PORT : 6379,
-  staticPath: process.env.STATIC_PATH || "../web",
+  staticPath: process.env.STATIC_PATH || "../admin/dist",
 	fileLocalStorePath: process.env.FILE_LOCAL_STORE_PATH || "./.file_store",
 };
 export function getConfig(): appConfig {
