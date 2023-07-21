@@ -1,6 +1,6 @@
-import { createAuthMeta } from "src/shared/permissions";
+import { createAuthMeta } from "../../../shared/permissions";
 import { privateProcedure, router } from "../../../trpc";
-import { queryPageable } from "src/shared/zod-schame";
+import { queryPageable } from "../../../shared/zod-schame";
 import { z } from "zod";
 import { db } from "../../../shared/db";
 import ExcelJS from "exceljs";
@@ -10,9 +10,9 @@ import {
 	getFileStream,
 	getFullDownloadUrl,
 	saveLocalFileFormStream,
-} from "src/service/file";
-import { logger } from "../../..//shared/logger";
-import { zodHashId } from "src/shared/hashids";
+} from "../../../service/file";
+import { logger } from "../../../shared/logger";
+import { zodHashId } from "../../../shared/hashids";
 // @ts-ignore
 // import pinyin from "pinyinlite";
 // function getPinYin(str: string): string {

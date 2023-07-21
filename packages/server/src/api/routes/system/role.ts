@@ -1,7 +1,7 @@
 import { privateProcedure, router } from "../../../trpc";
 import { z } from "zod";
 import { db } from "../../../shared/db";
-import { createAuthMeta } from "src/shared/permissions";
+import { createAuthMeta } from "../../../shared/permissions";
 
 const createRoleInput = z.object({
 	name: z.string(),

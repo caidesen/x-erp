@@ -1,4 +1,4 @@
-import { applyUploadPath } from "src/service/file";
+import { applyUploadPath } from "../../service/file";
 import { privateProcedure, router } from "../../trpc";
 import { z } from "zod";
 

@@ -2,7 +2,7 @@ import { middleware } from "./trpc";
 import { TRPCError } from "@trpc/server";
 import { getSession } from "../shared/session";
 import { logger } from "../shared/logger";
-import { getUserPermissions } from "src/service/auth";
+import { getUserPermissions } from "../service/auth";
 
 const createUnauthorizedError = () =>
   new TRPCError({ code: "UNAUTHORIZED", message: "当前未登陆" });

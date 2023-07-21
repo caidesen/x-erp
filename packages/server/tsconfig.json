@@ -16,9 +16,7 @@
     "incremental": true,
     "declaration": true,
     "noUncheckedIndexedAccess": true,
-    "baseUrl": ".",
-    "rootDir": "./src",
-    "outDir": "./dist/types",
+    "outDir": "./dist/types"
   },
   "include": ["src/**/*", "db"],
   "exclude": ["node_modules"]

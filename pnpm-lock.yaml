@@ -141,9 +141,6 @@ importers:
       pino:
         specifier: ^8.11.0
         version: 8.11.0
-      pinyinlite:
-        specifier: ^1.2.1
-        version: 1.2.1
       ramda:
         specifier: ^0.29.0
         version: 0.29.0
@@ -3392,10 +3389,6 @@ packages:
       safe-stable-stringify: 2.4.3
       sonic-boom: 3.3.0
       thread-stream: 2.3.0
-    dev: false
-
-  /pinyinlite@1.2.1:
-    resolution: {integrity: sha512-e3IQDbgoirNXRowOkVE5GOOWEMjugD5FX+GpQkktHpUgN4TppI3WV95CCbpsx/CtE0yLP0fHx0f/5KM4sOLrow==}
     dev: false
 
   /pirates@4.0.5:

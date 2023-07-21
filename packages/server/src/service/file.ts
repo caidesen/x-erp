@@ -1,10 +1,9 @@
-import { fetch } from "../shared/fetch";
 import { db } from "../shared/db";
-import { decodeID, ID } from "../shared/hashids";
+import {  ID } from "../shared/hashids";
 import fs from "fs-extra";
-import { getConfig } from "src/config";
 import { randomUUID } from "crypto";
-import { redis } from "src/shared/redis";
+import { getConfig } from "../config";
+import { redis } from "../shared/redis";
 
 /**
  * 将文件标记为占用状态
