@@ -6,7 +6,7 @@
   "main": "src/index.js",
   "typings": "src/index.ts",
   "files": [
-    "dist"
+    "dist", "prisma"
   ],
   "scripts": {
     "start": "tsx src/index.ts",
