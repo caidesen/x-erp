@@ -1,9 +1,9 @@
 import { Controller, Req } from "@nestjs/common";
-import { UserService } from "./user.service";
-import { LoginInput, UpdatePasswordInput } from "./dto/auth.dto";
+import { UserService } from "../services/user.service";
+import { LoginInput, UpdatePasswordInput } from "../dto/auth.dto";
 import { Request } from "express";
 import { InjectRepository } from "@mikro-orm/nestjs";
-import { Account } from "./entities/account.entity";
+import { Account } from "../entities/account.entity";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import bcrypt from "bcrypt";
 import { UserId } from "@/common/decorator/user-id.decorator";

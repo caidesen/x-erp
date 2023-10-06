@@ -10,10 +10,9 @@ export function PermissionSelector(props: PermissionSelectorProps) {
   const { data } = useQuery({
     queryKey: ["allPermissions"],
     queryFn: () =>
-      api.system.role
+      api.system.auth.role
         .getPermissions()
         .then((res) => _.entries(res).map(([code, name]) => ({ code, name }))),
-    onError: () => {},
   });
 
   return (

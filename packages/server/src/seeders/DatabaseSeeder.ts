@@ -1,14 +1,18 @@
 import { EntityData, type EntityManager, wrap } from "@mikro-orm/core";
 import { Factory, Faker, Seeder } from "@mikro-orm/seeder";
-import { User } from "@/modules/system/entities/user.entity";
-import { Account } from "@/modules/system/entities/account.entity";
-import { Role } from "@/modules/system/entities/role.entity";
+import { User } from "@/modules/system/auth/entities/user.entity";
+import { Account } from "@/modules/system/auth/entities/account.entity";
+import { Role } from "@/modules/system/auth/entities/role.entity";
 import Bcrypt from "bcrypt";
 import {
   Customer,
   CustomerContactInfo,
 } from "@/modules/crm/entities/customer.entity";
+import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
 
+/**
+ * 系统配置相关
+ */
 class SystemSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     const role = new Role();
@@ -29,6 +33,9 @@ class SystemSeeder extends Seeder {
   }
 }
 
+/**
+ * 客户工厂
+ */
 export class CustomerFactory extends Factory<Customer> {
   model = Customer;
 
@@ -44,6 +51,9 @@ export class CustomerFactory extends Factory<Customer> {
   }
 }
 
+/**
+ * 客户联系人工厂
+ */
 export class CustomerContactInfoFactory extends Factory<CustomerContactInfo> {
   model = CustomerContactInfo;
 
@@ -57,6 +67,9 @@ export class CustomerContactInfoFactory extends Factory<CustomerContactInfo> {
   }
 }
 
+/**
+ * 生成假客户
+ */
 class CustomerSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     new CustomerFactory(em)
@@ -67,8 +80,39 @@ class CustomerSeeder extends Seeder {
   }
 }
 
+/**
+ * 生成默认的配置
+ */
+class ConfigSeeder extends Seeder {
+  async run(em: EntityManager): Promise<void> {
+    const presetUnits: Partial<MeasurementUnit>[] = [
+      {
+        name: "克",
+        abbreviation: "g",
+        decimals: 0,
+      },
+      {
+        name: "千克",
+        abbreviation: "kg",
+        decimals: 0,
+      },
+      {
+        name: "斤",
+        abbreviation: "",
+        decimals: 0,
+      },
+      {
+        name: "个",
+        abbreviation: "",
+        decimals: 0,
+      },
+    ];
+    await em.persistAndFlush(presetUnits.map((it) => new MeasurementUnit(it)));
+  }
+}
+
 export class DatabaseSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    return this.call(em, [SystemSeeder, CustomerSeeder]);
+    return this.call(em, [SystemSeeder, CustomerSeeder, ConfigSeeder]);
   }
 }

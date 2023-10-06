@@ -44,20 +44,20 @@ function RoleFormItems() {
 export function Component() {
   const actionRef = React.useRef<ActionType>();
   const { mutateAsync: createRole } = useMutation({
-    mutationFn: api.system.role.create,
+    mutationFn: api.system.auth.role.create,
     onSuccess: () => {
       actionRef.current?.reload(true);
     },
   });
   const { mutateAsync: updateRole } = useMutation({
-    mutationFn: api.system.role.update,
+    mutationFn: api.system.auth.role.update,
     onSuccess() {
       message.success("修改成功");
       actionRef.current?.reload(true);
     },
   });
   const { mutateAsync: deleteRoles } = useMutation({
-    mutationFn: api.system.role.batchRemove,
+    mutationFn: api.system.auth.role.batchRemove,
     onSuccess() {
       message.success("删除成功");
       actionRef.current?.reload(true);
@@ -169,7 +169,7 @@ export function Component() {
           </ModalForm>,
         ]}
         request={async (data) => {
-          const list = await api.system.role.all();
+          const list = await api.system.auth.role.all();
           return {
             data: list,
             success: true,

@@ -1,5 +1,5 @@
 import { CommonEntity } from "@/common/entity";
-import { User } from "@/modules/system/entities/user.entity";
+import { User } from "@/modules/system/auth/entities/user.entity";
 import {
   Collection,
   Entity,

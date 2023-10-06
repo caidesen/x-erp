@@ -4,21 +4,21 @@ import {
   MyUserInfoVo,
   UpdateUserInput,
   UserVO,
-} from "./dto/user.dto";
+} from "@/modules/system/auth/dto/user.dto";
 import { EntityRepository } from "@mikro-orm/postgresql";
-import { User } from "./entities/user.entity";
+import { User } from "@/modules/system/auth/entities/user.entity";
 import { InjectRepository } from "@mikro-orm/nestjs";
-import { UserService } from "./user.service";
+import { UserService } from "../services/user.service";
 import { IdsOnly } from "@/common/dto";
 import { Reference, serialize } from "@mikro-orm/core";
 import { UserId } from "@/common/decorator/user-id.decorator";
 import _ from "lodash";
-import { Role } from "./entities/role.entity";
+import { Role } from "@/modules/system/auth/entities/role.entity";
 import { TypedBody, TypedRoute } from "@nestia/core";
 
 const { Post } = TypedRoute;
 
-@Controller("system/user")
+@Controller("system/auth/user")
 export class UserController {
   constructor(
     @InjectRepository(User)
@@ -26,12 +26,12 @@ export class UserController {
     private readonly userService: UserService
   ) {}
 
-  @Post("create")
+  @Post("createUser")
   async create(@TypedBody() input: CreateUserInput) {
     await this.userService.createUser(input);
   }
 
-  @Post("all")
+  @Post("getAllUser")
   async findAll() {
     const list = await this.userRepository.findAll({
       populate: ["account", "roles"],
@@ -41,7 +41,7 @@ export class UserController {
     }) as unknown as UserVO[];
   }
 
-  @Post("update")
+  @Post("updateUser")
   async update(@TypedBody() input: UpdateUserInput) {
     const user = await this.userRepository.findOneOrFail(input.id, {
       populate: ["account", "roles"],
@@ -53,7 +53,7 @@ export class UserController {
     return this.userRepository.getEntityManager().flush();
   }
 
-  @Post("batchRemove")
+  @Post("batchRemoveUser")
   async remove(@TypedBody() input: IdsOnly) {
     const users = input.ids.map((it) => this.userRepository.getReference(it));
     await this.userRepository.getEntityManager().removeAndFlush(users);

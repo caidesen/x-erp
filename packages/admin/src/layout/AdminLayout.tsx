@@ -9,7 +9,6 @@ import { useFilteredRoutes } from "@/route";
 import { Dropdown, message } from "antd";
 import { LogoutOutlined } from "@ant-design/icons";
 import { useRef } from "react";
-import _ from "lodash";
 import { useMutation, useQuery } from "@tanstack/react-query";
 import { api } from "@/api";
 
@@ -88,8 +87,8 @@ export function UpdatePasswordModal() {
 export function Component(props: { children?: React.ReactNode }) {
   const location = useLocation();
   const { data: userInfo } = useQuery({
-    queryKey: [api.system.user.getMine.cacheKey],
-    queryFn: () => api.system.user.getMine(),
+    queryKey: [api.system.auth.user.getMine.cacheKey],
+    queryFn: () => api.system.auth.user.getMine(),
   });
   const routes = useFilteredRoutes(userInfo?.permissions ?? []);
   console.log(routes);

@@ -1,10 +1,10 @@
 import { InjectRepository } from "@mikro-orm/nestjs";
 import { Injectable } from "@nestjs/common";
-import { User } from "./entities/user.entity";
+import { User } from "@/modules/system/auth/entities/user.entity";
 import { EntityRepository, Reference, wrap } from "@mikro-orm/core";
-import { Account } from "./entities/account.entity";
+import { Account } from "@/modules/system/auth/entities/account.entity";
 import pinyin from "pinyinlite";
-import { Role } from "./entities/role.entity";
+import { Role } from "@/modules/system/auth/entities/role.entity";
 import { InputException } from "@/common/exception";
 import bcrypt from "bcrypt";
 import _ from "lodash";

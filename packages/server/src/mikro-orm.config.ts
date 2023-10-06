@@ -4,7 +4,8 @@ import * as dotenv from "dotenv";
 dotenv.config();
 
 export default defineConfig({
-  entities: ["./src/**/entities/*.entity.ts"],
+  entities: ["./src/**/entities/*.entity.js"],
+  entitiesTs: ["./src/**/entities/*.entity.ts"],
   debug: true,
   host: process.env.DB_HOST,
   port: +(process.env.DB_PORT ?? 5432),

@@ -5,8 +5,8 @@ import { api } from "@/api";
 
 export function useUserOptions() {
   const { data } = useQuery({
-    queryKey: [api.system.user.all.cacheKey],
-    queryFn: () => api.system.user.all(),
+    queryKey: [api.system.auth.user.all.cacheKey],
+    queryFn: () => api.system.auth.user.all(),
   });
   return data?.map((item) => ({ label: item.nickname, value: item.id })) ?? [];
 }

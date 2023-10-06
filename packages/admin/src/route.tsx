@@ -31,6 +31,12 @@ const bizPageRoutes: RouteType[] = [
         needPermissions: ["user:all"],
         lazy: () => import("@/views/system/user/list"),
       },
+      {
+        path: "/system/config/measure",
+        name: "计量单位管理",
+        needPermissions: ["config:measure:all"],
+        lazy: () => import("@/views/system/config/measure/list"),
+      },
     ],
   },
   {

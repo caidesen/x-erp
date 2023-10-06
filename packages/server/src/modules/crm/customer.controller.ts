@@ -12,7 +12,7 @@ import { IdsOnly } from "@/common/dto";
 import { TypedBody, TypedRoute } from "@nestia/core";
 import { QueryOrder, Reference, serialize } from "@mikro-orm/core";
 import _ from "lodash";
-import { User } from "../system/entities/user.entity";
+import { User } from "@/modules/system/auth/entities/user.entity";
 import { getPageableParams } from "@/common/helpers/pagination";
 import { queryCondBuilder } from "@/common/query-cond-builder";
 

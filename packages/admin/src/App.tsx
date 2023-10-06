@@ -7,8 +7,8 @@ import { api } from "./api";
 export default function App() {
   const isLoginPage = location.pathname === "/login";
   const { data: userInfo, isLoading: userInfoLoading } = useQuery({
-    queryKey: [api.system.user.getMine.cacheKey],
-    queryFn: () => api.system.user.getMine(),
+    queryKey: [api.system.auth.user.getMine.cacheKey],
+    queryFn: () => api.system.auth.user.getMine(),
     enabled: !isLoginPage,
   });
   const routes = useFilteredRoutes(userInfo?.permissions ?? []);

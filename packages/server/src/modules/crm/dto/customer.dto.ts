@@ -1,5 +1,5 @@
 import { PageableQueryInput } from "@/common/dto";
-import { SimpleUserVO } from "@/modules/system/dto/user.dto";
+import { SimpleUserVO } from "@/modules/system/auth/dto/user.dto";
 
 export interface QueryCustomerInput extends PageableQueryInput {
   fullName?: string;
