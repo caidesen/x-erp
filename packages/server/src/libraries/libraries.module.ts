@@ -1,5 +1,10 @@
-import { Module } from "@nestjs/common";
+import { Global, Module } from "@nestjs/common";
 import "./dayjs.import";
+import { RedisModule } from "@/libraries/redis/redis.module";
 
-@Module({})
+@Global()
+@Module({
+  imports: [RedisModule],
+  exports: [RedisModule],
+})
 export class LibrariesModule {}
