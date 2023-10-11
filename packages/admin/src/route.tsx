@@ -63,6 +63,12 @@ const bizPageRoutes: RouteType[] = [
         needPermissions: ["inventory:query"],
         lazy: () => import("@/views/inventory/product/list"),
       },
+      {
+        path: "/inventory/storage",
+        name: "仓库管理",
+        needPermissions: ["inventory:query"],
+        lazy: () => import("@/views/inventory/storage/list"),
+      },
     ],
   },
 ];

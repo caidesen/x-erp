@@ -8,10 +8,9 @@ import {
   QueryProductInput,
   UpdateProductInput,
 } from "@/modules/inventory/product/dto/product.dto";
-import {
-  Product,
-  ProductUnit,
-} from "@/modules/inventory/product/entities/product.entity";
+import { Product } from "@/modules/inventory/product/entities/product.entity";
+import { ProductUnit } from "@/modules/inventory/product/entities/product-uint.entity";
+
 import { queryCondBuilder } from "@/common/query-cond-builder";
 import { getPageableParams } from "@/common/helpers/pagination";
 import { LoadStrategy, QueryOrder, ref, serialize } from "@mikro-orm/core";

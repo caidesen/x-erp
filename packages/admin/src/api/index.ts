@@ -71,6 +71,18 @@ const api = {
     },
   },
   inventory: {
+    storage: {
+      all: defineAPI<void, API.StorageVO[]>("inventory/storage/all"),
+      create: defineAPI<API.CreateStorageInput, void>(
+        "inventory/storage/create"
+      ),
+      update: defineAPI<API.UpdateStorageInput, void>(
+        "inventory/storage/update"
+      ),
+      batchRemove: defineAPI<API.IdsOnly, void>(
+        "inventory/storage/batchRemove"
+      ),
+    },
     product: {
       list: defineAPI<
         API.QueryProductInput,
