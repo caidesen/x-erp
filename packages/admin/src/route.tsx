@@ -52,6 +52,19 @@ const bizPageRoutes: RouteType[] = [
       },
     ],
   },
+  {
+    path: "/inventory",
+    name: "库存管理",
+    element: <Outlet />,
+    children: [
+      {
+        path: "/inventory/product",
+        name: "商品管理",
+        needPermissions: ["inventory:query"],
+        lazy: () => import("@/views/inventory/product/list"),
+      },
+    ],
+  },
 ];
 
 export function routesFilterWithPermissions(

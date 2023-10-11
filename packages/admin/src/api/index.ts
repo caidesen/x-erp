@@ -1,5 +1,6 @@
 import { defineAPI } from "@/shared";
 import * as API from "@nest-admin/server";
+import { defineQueryAPI } from "@/shared/lib/request";
 
 const api = {
   auth: {
@@ -43,7 +44,7 @@ const api = {
     },
     config: {
       measure: {
-        getAllMeasurementUnit: defineAPI<void, API.MeasurementUnitVO[]>(
+        getAllMeasurementUnit: defineQueryAPI<void, API.MeasurementUnitVO[]>(
           "config/measure/getAllMeasurementUnit"
         ),
         createMeasurementUnit: defineAPI<API.CreateMeasurementUnitInput, void>(
@@ -67,6 +68,26 @@ const api = {
       create: defineAPI<API.CreateCustomerInput, void>("crm/customer/create"),
       update: defineAPI<API.UpdateCustomerInput, void>("crm/customer/update"),
       batchRemove: defineAPI<API.IdsOnly, void>("crm/customer/batchRemove"),
+    },
+  },
+  inventory: {
+    product: {
+      list: defineAPI<
+        API.QueryProductInput,
+        API.PaginationResult<API.ProductVO>
+      >("inventory/product/list"),
+      detail: defineAPI<API.IdOnly, API.ProductDetailVO>(
+        "inventory/product/detail"
+      ),
+      create: defineAPI<API.CreateProductInput, void>(
+        "inventory/product/create"
+      ),
+      update: defineAPI<API.UpdateProductInput, void>(
+        "inventory/product/update"
+      ),
+      batchRemove: defineAPI<API.IdsOnly, void>(
+        "inventory/product/batchRemove"
+      ),
     },
   },
 };

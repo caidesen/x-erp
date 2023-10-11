@@ -1,4 +1,8 @@
-import { QueryClient } from "@tanstack/react-query";
+import type {
+  DefinedUseQueryResult,
+  UseQueryOptions,
+} from "@tanstack/react-query";
+import { QueryClient, useQuery, UseQueryResult } from "@tanstack/react-query";
 import { message } from "antd";
 
 export async function request(url: string, options?: RequestInit) {
@@ -25,24 +29,42 @@ export async function request(url: string, options?: RequestInit) {
       return Promise.reject(error);
     })
     .then((res) => {
-      if (typeof res === "string") {
-        try {
-          return JSON.parse(res);
-        } catch (e) {
-          return res;
-        }
+      try {
+        return JSON.parse(res);
+      } catch (e) {
+        return res;
       }
-      return res;
     })
     .catch((err) => {
       message.error(err.message);
       return Promise.reject(err);
     });
 }
+
 interface IApi<P, R> {
   cacheKey: string;
+
   (params: P, options?: RequestInit): Promise<R>;
 }
+
+interface IQueryApi<P, R> extends IApi<P, R> {
+  useQuery(
+    params: P,
+    options: Omit<
+      UseQueryOptions<R, unknown, R, [string, P]>,
+      "queryKey" | "queryFn" | "initialData"
+    > & { initialData: R | (() => R) }
+  ): DefinedUseQueryResult<R>;
+
+  useQuery(
+    params: P,
+    options?: Omit<
+      UseQueryOptions<R, unknown, R, [string, P]>,
+      "queryKey" | "queryFn"
+    >
+  ): UseQueryResult<R>;
+}
+
 export function defineAPI<P, R>(url: string): IApi<P, R> {
   const fn = function (params: P, options?: RequestInit) {
     return request(url, {
@@ -51,8 +73,24 @@ export function defineAPI<P, R>(url: string): IApi<P, R> {
     }) as Promise<R>;
   };
   fn.cacheKey = url;
+
   return fn;
 }
+
+export function defineQueryAPI<P, R>(url: string): IQueryApi<P, R> {
+  const fn = defineAPI(url) as IQueryApi<P, R>;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  fn.useQuery = (params: P, options?) =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useQuery({
+      ...options,
+      queryKey: [url, params],
+      queryFn: (a) => fn(params, { signal: a.signal }),
+    });
+  return fn;
+}
+
 export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {

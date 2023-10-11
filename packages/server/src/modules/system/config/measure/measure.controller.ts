@@ -1,5 +1,6 @@
 import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
-import { EntityManager, serialize } from "@mikro-orm/core";
+import { serialize } from "@mikro-orm/core";
+import { EntityManager } from "@mikro-orm/postgresql";
 import { TypedBody, TypedRoute } from "@nestia/core";
 import {
   CreateMeasurementUnitInput,
@@ -11,8 +12,7 @@ import { IdsOnly } from "@/common/dto";
 import { Controller } from "@nestjs/common";
 import { HasAuthority } from "@/common/decorator/has-authority.decorator";
 import _ from "lodash";
-
-const Post = TypedRoute.Post;
+import Post = TypedRoute.Post;
 
 @Controller("config/measure")
 export class MeasureController {

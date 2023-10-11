@@ -15,12 +15,19 @@ const customerPermissions = {
   "customer:export": "客户导出",
 } as const;
 const configPermissions = {
-  "config:all": "计量单位查询",
+  "config:all": "系统配置",
+} as const;
+const inventoryPermissions = {
+  "inventory:query": "商品查询",
+  "inventory:create": "商品创建",
+  "inventory:update": "商品更新",
+  "inventory:delete": "商品删除",
 } as const;
 export const fixedPermissions = {
   "role:all": "角色管理",
   "user:all": "用户管理",
   ...customerPermissions,
   ...configPermissions,
+  ...inventoryPermissions,
 } as const;
 export type permissionKeys = keyof typeof fixedPermissions;

@@ -201,7 +201,7 @@ export function Component() {
             <FormItems />
           </ModalForm>,
         ]}
-        request={async (data) => {
+        request={async () => {
           const list = await api.system.config.measure.getAllMeasurementUnit();
           return {
             data: list,
