@@ -17,17 +17,17 @@ const customerPermissions = {
 const configPermissions = {
   "config:all": "系统配置",
 } as const;
-const inventoryPermissions = {
-  "inventory:query": "商品查询",
-  "inventory:create": "商品创建",
-  "inventory:update": "商品更新",
-  "inventory:delete": "商品删除",
+const wmsPermissions = {
+  "wms:query": "商品查询",
+  "wms:create": "商品创建",
+  "wms:update": "商品更新",
+  "wms:delete": "商品删除",
 } as const;
 export const fixedPermissions = {
   "role:all": "角色管理",
   "user:all": "用户管理",
   ...customerPermissions,
   ...configPermissions,
-  ...inventoryPermissions,
+  ...wmsPermissions,
 } as const;
 export type permissionKeys = keyof typeof fixedPermissions;

@@ -5,7 +5,7 @@ import {
   UpdateDateProperty,
 } from "mikro-orm-plus";
 import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
-import { Product } from "@/modules/inventory/product/entities/product.entity";
+import { Product } from "@/modules/wms/product/entities/product.entity";
 
 @Entity()
 export class ProductUnit {

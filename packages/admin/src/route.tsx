@@ -53,21 +53,21 @@ const bizPageRoutes: RouteType[] = [
     ],
   },
   {
-    path: "/inventory",
+    path: "/wms",
     name: "库存管理",
     element: <Outlet />,
     children: [
       {
-        path: "/inventory/product",
+        path: "/wms/product",
         name: "商品管理",
-        needPermissions: ["inventory:query"],
-        lazy: () => import("@/views/inventory/product/list"),
+        needPermissions: ["wms:query"],
+        lazy: () => import("@/views/wms/product/list"),
       },
       {
-        path: "/inventory/storage",
+        path: "/wms/warehouse",
         name: "仓库管理",
-        needPermissions: ["inventory:query"],
-        lazy: () => import("@/views/inventory/storage/list"),
+        needPermissions: ["wms:query"],
+        lazy: () => import("@/views/wms/warehouse/list"),
       },
     ],
   },

@@ -44,20 +44,20 @@ function FormItems() {
 export function Component() {
   const actionRef = React.useRef<ActionType>();
   const { mutateAsync: doCreate } = useMutation({
-    mutationFn: api.inventory.storage.create,
+    mutationFn: api.wms.warehouse.create,
     onSuccess: () => {
       actionRef.current?.reload(true);
     },
   });
   const { mutateAsync: doUpdate } = useMutation({
-    mutationFn: api.inventory.storage.update,
+    mutationFn: api.wms.warehouse.update,
     onSuccess() {
       message.success("修改成功");
       actionRef.current?.reload(true);
     },
   });
   const { mutateAsync: doRemove } = useMutation({
-    mutationFn: api.inventory.storage.batchRemove,
+    mutationFn: api.wms.warehouse.batchRemove,
     onSuccess() {
       message.success("删除成功");
       actionRef.current?.reload(true);
@@ -66,7 +66,7 @@ export function Component() {
   const [selectedKeys, setSelectedKeys] = useState<string[]>([]);
   return (
     <PageContainer>
-      <ProTable<API.StorageVO>
+      <ProTable<API.WarehouseVO>
         search={false}
         actionRef={actionRef}
         rowKey="id"
@@ -153,7 +153,7 @@ export function Component() {
           </Space>
         )}
         toolBarRender={() => [
-          <ModalForm<API.CreateStorageInput>
+          <ModalForm<API.CreateWarehouseInput>
             trigger={<Button type="primary">新建</Button>}
             title="创建仓库"
             key="create"
@@ -172,7 +172,7 @@ export function Component() {
           </ModalForm>,
         ]}
         request={async () => {
-          const list = await api.inventory.storage.all();
+          const list = await api.wms.warehouse.all();
           return {
             data: list,
             total: list.length,

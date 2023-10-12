@@ -70,36 +70,22 @@ const api = {
       batchRemove: defineAPI<API.IdsOnly, void>("crm/customer/batchRemove"),
     },
   },
-  inventory: {
-    storage: {
-      all: defineAPI<void, API.StorageVO[]>("inventory/storage/all"),
-      create: defineAPI<API.CreateStorageInput, void>(
-        "inventory/storage/create"
-      ),
-      update: defineAPI<API.UpdateStorageInput, void>(
-        "inventory/storage/update"
-      ),
-      batchRemove: defineAPI<API.IdsOnly, void>(
-        "inventory/storage/batchRemove"
-      ),
+  wms: {
+    warehouse: {
+      all: defineAPI<void, API.WarehouseVO[]>("wms/warehouse/all"),
+      create: defineAPI<API.CreateWarehouseInput, void>("wms/warehouse/create"),
+      update: defineAPI<API.UpdateWarehouseInput, void>("wms/warehouse/update"),
+      batchRemove: defineAPI<API.IdsOnly, void>("wms/warehouse/batchRemove"),
     },
     product: {
       list: defineAPI<
         API.QueryProductInput,
         API.PaginationResult<API.ProductVO>
-      >("inventory/product/list"),
-      detail: defineAPI<API.IdOnly, API.ProductDetailVO>(
-        "inventory/product/detail"
-      ),
-      create: defineAPI<API.CreateProductInput, void>(
-        "inventory/product/create"
-      ),
-      update: defineAPI<API.UpdateProductInput, void>(
-        "inventory/product/update"
-      ),
-      batchRemove: defineAPI<API.IdsOnly, void>(
-        "inventory/product/batchRemove"
-      ),
+      >("wms/product/list"),
+      detail: defineAPI<API.IdOnly, API.ProductDetailVO>("wms/product/detail"),
+      create: defineAPI<API.CreateProductInput, void>("wms/product/create"),
+      update: defineAPI<API.UpdateProductInput, void>("wms/product/update"),
+      batchRemove: defineAPI<API.IdsOnly, void>("wms/product/batchRemove"),
     },
   },
 };

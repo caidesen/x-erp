@@ -7,9 +7,9 @@ import {
   ProductVO,
   QueryProductInput,
   UpdateProductInput,
-} from "@/modules/inventory/product/dto/product.dto";
-import { Product } from "@/modules/inventory/product/entities/product.entity";
-import { ProductUnit } from "@/modules/inventory/product/entities/product-uint.entity";
+} from "@/modules/wms/product/dto/product.dto";
+import { Product } from "@/modules/wms/product/entities/product.entity";
+import { ProductUnit } from "@/modules/wms/product/entities/product-uint.entity";
 
 import { queryCondBuilder } from "@/common/query-cond-builder";
 import { getPageableParams } from "@/common/helpers/pagination";
@@ -20,7 +20,7 @@ import { InputException } from "@/common/exception";
 import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
 import Post = TypedRoute.Post;
 
-@Controller("inventory/product")
+@Controller("wms/product")
 export class ProductController {
   constructor(private readonly em: EntityManager) {}
 

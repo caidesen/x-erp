@@ -10,7 +10,7 @@ import {
   Ref,
 } from "@mikro-orm/core";
 import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
-import { ProductUnit } from "@/modules/inventory/product/entities/product-uint.entity";
+import { ProductUnit } from "@/modules/wms/product/entities/product-uint.entity";
 
 @Entity()
 export class Product extends CommonEntity {

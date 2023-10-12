@@ -9,5 +9,5 @@ export type * from "@/modules/system/auth/dto/user.dto";
 export type * from "@/modules/system/auth/dto/auth.dto";
 export type * from "@/modules/crm/dto/customer.dto";
 export type * from "@/modules/system/config/measure/dto/measure.dto";
-export type * from "@/modules/inventory/product/dto/product.dto";
-export type * from "@/modules/inventory/storage/dto/storage.dto";
+export type * from "@/modules/wms/product/dto/product.dto";
+export type * from "@/modules/wms/warehouse/dto/warehouse.dto";

@@ -17,7 +17,7 @@ import { API, api } from "@/api";
 import { useMutation } from "@tanstack/react-query";
 import EditOutlined from "@ant-design/icons/EditOutlined";
 import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
-import { UnitSelector } from "@/views/inventory/product/components/UnitSelector";
+import { UnitSelector } from "@/views/wms/product/components/UnitSelector";
 import _ from "lodash";
 
 function FormItems() {
@@ -158,20 +158,20 @@ function FormItems() {
 export function Component() {
   const actionRef = React.useRef<ActionType>();
   const { mutateAsync: doCreate } = useMutation({
-    mutationFn: api.inventory.product.create,
+    mutationFn: api.wms.product.create,
     onSuccess: () => {
       actionRef.current?.reload(true);
     },
   });
   const { mutateAsync: doUpdate } = useMutation({
-    mutationFn: api.inventory.product.update,
+    mutationFn: api.wms.product.update,
     onSuccess() {
       message.success("修改成功");
       actionRef.current?.reload(true);
     },
   });
   const { mutateAsync: doRemove } = useMutation({
-    mutationFn: api.inventory.product.batchRemove,
+    mutationFn: api.wms.product.batchRemove,
     onSuccess() {
       message.success("删除成功");
       actionRef.current?.reload(true);
@@ -204,7 +204,7 @@ export function Component() {
               <ModalForm
                 key="edit"
                 request={async () => {
-                  const res = await api.inventory.product.detail({
+                  const res = await api.wms.product.detail({
                     id: record.id,
                   });
                   res.units.forEach((it: any) => (it.id = _.uniqueId()));
@@ -295,7 +295,7 @@ export function Component() {
           </ModalForm>,
         ]}
         request={async (data) => {
-          const { list, total } = await api.inventory.product.list({
+          const { list, total } = await api.wms.product.list({
             ...data,
           });
           return {
