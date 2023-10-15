@@ -1,8 +1,23 @@
-import { Loaded, SerializeOptions, serialize } from "@mikro-orm/core";
+import { serialize, SerializeOptions } from "@mikro-orm/core";
+import { PaginationResult } from "@/common/dto";
 
-export function getVo<T extends object, Entity extends object = never>(
-  entity: Loaded<Entity>,
-  options?: SerializeOptions<Loaded<Entity, never>>
-): T {
-  return serialize(entity, options) as unknown as T;
+export function Serializer<T extends object, P extends string>(
+  entity: T | T[],
+  options?: SerializeOptions<T, P>
+) {
+  function toVO<VO>() {
+    return serialize(entity as T, options) as unknown as VO;
+  }
+
+  function toPaginationResult<VO>(total: number): PaginationResult<VO> {
+    return {
+      list: serialize(entity as T[], options) as unknown as VO[],
+      total,
+    };
+  }
+
+  return {
+    toVO,
+    toPaginationResult,
+  };
 }

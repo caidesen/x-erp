@@ -7,9 +7,9 @@ import {
   ProductVO,
   QueryProductInput,
   UpdateProductInput,
-} from "@/modules/wms/product/dto/product.dto";
-import { Product } from "@/modules/wms/product/entities/product.entity";
-import { ProductUnit } from "@/modules/wms/product/entities/product-uint.entity";
+} from "@/modules/wms/dto/product.dto";
+import { Product } from "@/modules/wms/entities/product.entity";
+import { ProductUnit } from "@/modules/wms/entities/product-uint.entity";
 
 import { queryCondBuilder } from "@/common/query-cond-builder";
 import { getPageableParams } from "@/common/helpers/pagination";
@@ -17,7 +17,7 @@ import { LoadStrategy, QueryOrder, ref, serialize } from "@mikro-orm/core";
 import { IdOnly, IdsOnly, PaginationResult } from "@/common/dto";
 import _ from "lodash";
 import { InputException } from "@/common/exception";
-import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
+import { Unit } from "@/modules/system/config/unit/entities/unit.entity";
 import Post = TypedRoute.Post;
 
 @Controller("wms/product")
@@ -66,7 +66,7 @@ export class ProductController {
   @Post("create")
   async create(@TypedBody() input: CreateProductInput) {
     const product = new Product(_.omit(input, ["units", "baseUnit"]));
-    product.baseUnit = ref(MeasurementUnit, input.baseUnit.id);
+    product.baseUnit = ref(Unit, input.baseUnit.id);
     if (input.multiUnitEnabled) {
       if (!input.units || input.units.length === 0) {
         throw new InputException("至少选择一个计量单位");

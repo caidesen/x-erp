@@ -13,12 +13,12 @@ export abstract class CommonEntity {
   @PrimaryKey({ type: t.bigint })
   id: string;
 
-  @CreateDateProperty({ hidden: true })
+  @CreateDateProperty({})
   createdAt: Date = new Date();
 
-  @UpdateDateProperty({ hidden: true })
+  @UpdateDateProperty({})
   updatedAt: Date = new Date();
 
-  @DeleteDateProperty({ hidden: true })
+  @DeleteDateProperty({})
   deletedAt?: Date;
 }

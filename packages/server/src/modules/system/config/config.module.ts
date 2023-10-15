@@ -1,7 +1,7 @@
 import { Module } from "@nestjs/common";
-import { MeasureModule } from "@/modules/system/config/measure/measure.module";
+import { UnitModule } from "@/modules/system/config/unit/unit.module";
 
 @Module({
-  imports: [MeasureModule],
+  imports: [UnitModule],
 })
 export class ConfigModule {}

@@ -9,8 +9,8 @@ import {
   QueryOrder,
   Ref,
 } from "@mikro-orm/core";
-import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
-import { ProductUnit } from "@/modules/wms/product/entities/product-uint.entity";
+import { Unit } from "@/modules/system/config/unit/entities/unit.entity";
+import { ProductUnit } from "@/modules/wms/entities/product-uint.entity";
 
 @Entity()
 export class Product extends CommonEntity {
@@ -25,8 +25,8 @@ export class Product extends CommonEntity {
   /**
    * 基础计量单位
    */
-  @ManyToOne(() => MeasurementUnit, { eager: true, ref: true })
-  baseUnit: Ref<MeasurementUnit>;
+  @ManyToOne(() => Unit, { eager: true, ref: true })
+  baseUnit: Ref<Unit>;
 
   /** 是否支持多单位 */
   @Property()

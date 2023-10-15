@@ -17,12 +17,12 @@ import { API, api } from "@/api";
 import { useMutation } from "@tanstack/react-query";
 import EditOutlined from "@ant-design/icons/EditOutlined";
 import DeleteOutlined from "@ant-design/icons/DeleteOutlined";
-import { UnitSelector } from "@/views/wms/product/components/UnitSelector";
+import { UnitSelector } from "@/views/wms/components/UnitSelector";
 import _ from "lodash";
 
 function FormItems() {
   const [editableKeys, setEditableKeys] = useState<string[]>([]);
-  const { data } = api.system.config.measure.getAllMeasurementUnit.useQuery();
+  const { data } = api.system.config.unit.all.useQuery();
   const unitMap = useMemo(() => _.keyBy(data, "id"), [data]);
   const getUnitName = (unitId: any) => unitMap[unitId!]?.name ?? "";
   return (

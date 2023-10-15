@@ -19,8 +19,7 @@ interface UnitTableProps {
 }
 
 export function UnitTable(props: UnitTableProps) {
-  const { data, isFetching } =
-    api.system.config.measure.getAllMeasurementUnit.useQuery();
+  const { data, isFetching } = api.system.config.unit.all.useQuery();
   return (
     <Table
       dataSource={data}
@@ -57,8 +56,7 @@ export function UnitSelector(props: UnitSelectorProps) {
   const className = props.className ?? "";
   const [visible, setVisible] = useState(false);
   const selectRef = React.useRef<RefSelectProps>(null);
-  const { data, isLoading } =
-    api.system.config.measure.getAllMeasurementUnit.useQuery();
+  const { data, isLoading } = api.system.config.unit.all.useQuery();
   return (
     <>
       <Select

@@ -1,8 +1,9 @@
 import { QBFilterQuery } from "@mikro-orm/core";
 import _ from "lodash";
+import { AutoPath } from "@mikro-orm/core/typings";
 
-class QueryCondBuilder<T> {
-  private _cond = {};
+class QueryCondBuilder<T extends object> {
+  private _cond: QBFilterQuery<T> = {};
 
   get cond() {
     return this._cond;
@@ -20,17 +21,17 @@ class QueryCondBuilder<T> {
     return this;
   }
 
-  eq(key: keyof T, val: any) {
-    this.if(!_.isEmpty(val), { [key]: val });
+  eq<P extends string>(key: AutoPath<T, P>, val: any) {
+    this.if(!_.isEmpty(val), _.set({}, key, val));
     return this;
   }
 
-  like(key: keyof T, val: any) {
-    this.if(!_.isEmpty(val), { [key]: { $like: `%${val}%` } });
+  like<P extends string>(key: AutoPath<T, P>, val: any) {
+    this.if(!_.isEmpty(val), _.set({}, key, { $like: `%${val}%` }));
     return this;
   }
 }
 
-export function queryCondBuilder<T>() {
+export function queryCondBuilder<T extends object>() {
   return new QueryCondBuilder<T>();
 }

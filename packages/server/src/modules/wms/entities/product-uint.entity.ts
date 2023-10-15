@@ -4,8 +4,8 @@ import {
   DeleteDateProperty,
   UpdateDateProperty,
 } from "mikro-orm-plus";
-import { MeasurementUnit } from "@/modules/system/config/measure/entities/measurement-unit.entity";
-import { Product } from "@/modules/wms/product/entities/product.entity";
+import { Unit } from "@/modules/system/config/unit/entities/unit.entity";
+import { Product } from "@/modules/wms/entities/product.entity";
 
 @Entity()
 export class ProductUnit {
@@ -21,13 +21,13 @@ export class ProductUnit {
   @ManyToOne(() => Product, { hidden: true, primary: true })
   product: Ref<Product>;
 
-  @ManyToOne(() => MeasurementUnit, {
+  @ManyToOne(() => Unit, {
     hidden: true,
     eager: true,
     primary: true,
     ref: true,
   })
-  unit: Ref<MeasurementUnit>;
+  unit: Ref<Unit>;
 
   /** 换算比率 */
   @Property()
@@ -55,7 +55,7 @@ export class ProductUnit {
     }>
   ) {
     if (!val) return;
-    this.unit = ref(MeasurementUnit, val.unitId);
+    this.unit = ref(Unit, val.unitId);
     if (val.transformRatio) {
       this.transformRatio = val.transformRatio;
     }

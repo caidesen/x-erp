@@ -43,19 +43,11 @@ const api = {
       },
     },
     config: {
-      measure: {
-        getAllMeasurementUnit: defineQueryAPI<void, API.MeasurementUnitVO[]>(
-          "config/measure/getAllMeasurementUnit"
-        ),
-        createMeasurementUnit: defineAPI<API.CreateMeasurementUnitInput, void>(
-          "config/measure/createMeasurementUnit"
-        ),
-        updateMeasurementUnit: defineAPI<API.UpdateMeasurementUnitInput, void>(
-          "config/measure/updateMeasurementUnit"
-        ),
-        batchRemoveMeasurementUnit: defineAPI<API.IdsOnly, void>(
-          "config/measure/batchRemoveMeasurementUnit"
-        ),
+      unit: {
+        all: defineQueryAPI<void, API.UnitVO[]>("config/unit/all"),
+        create: defineAPI<API.CreateUnitInput, void>("config/unit/create"),
+        update: defineAPI<API.UpdateUnitInput, void>("config/unit/update"),
+        Unit: defineAPI<API.IdsOnly, void>("config/unit/batchRemove"),
       },
     },
   },
@@ -86,6 +78,18 @@ const api = {
       create: defineAPI<API.CreateProductInput, void>("wms/product/create"),
       update: defineAPI<API.UpdateProductInput, void>("wms/product/update"),
       batchRemove: defineAPI<API.IdsOnly, void>("wms/product/batchRemove"),
+    },
+    beginningStock: {
+      list: defineAPI<
+        API.QueryBeginningStockInput,
+        API.PaginationResult<API.BeginningStockVO>
+      >("/wms/beginning-stock/list"),
+      create: defineAPI<API.CreateBeginningStockInput, void>(
+        "wms/beginning-stock/create"
+      ),
+      update: defineAPI<API.UpdateBeginningStockInput, void>(
+        "wms/beginning-stock/update"
+      ),
     },
   },
 };

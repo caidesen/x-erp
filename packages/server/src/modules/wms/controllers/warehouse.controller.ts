@@ -1,13 +1,13 @@
 import { Controller } from "@nestjs/common";
 import { TypedRoute, TypedBody } from "@nestia/core";
 import { EntityManager } from "@mikro-orm/postgresql";
-import { Warehouse } from "@/modules/wms/warehouse/entities/warehouse.entity";
+import { Warehouse } from "@/modules/wms/entities/warehouse.entity";
 import { serialize } from "@mikro-orm/core";
 import {
   CreateWarehouseInput,
   WarehouseVO,
   UpdateWarehouseInput,
-} from "@/modules/wms/warehouse/dto/warehouse.dto";
+} from "@/modules/wms/dto/warehouse.dto";
 import { InputException } from "@/common/exception";
 import { IdsOnly } from "@/common/dto";
 import Post = TypedRoute.Post;

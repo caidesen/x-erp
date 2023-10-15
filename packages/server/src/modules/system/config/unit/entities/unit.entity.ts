@@ -2,11 +2,12 @@ import { Entity, Property } from "@mikro-orm/core";
 import { CommonEntity } from "@/common/entity";
 
 @Entity()
-export class MeasurementUnit extends CommonEntity {
-  constructor(val: Partial<MeasurementUnit>) {
+export class Unit extends CommonEntity {
+  constructor(val: Partial<Unit>) {
     super();
     Object.assign(this, val);
   }
+
   /** 单位名称 */
   @Property()
   name: string;
