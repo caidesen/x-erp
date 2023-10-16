@@ -12,7 +12,7 @@ import { Button, Dropdown, message, Modal, Popover, Space, Tag } from "antd";
 import React, { useState } from "react";
 import { ProFormUserSelector } from "@/shared/components/UserSelector";
 import { api, API } from "@/api";
-import { CustomerContactInput } from "./components/CustomerContactInput";
+import { CustomerContactInput } from "@/views/crm/customer/components/CustomerContactInput";
 import _ from "lodash";
 
 const rules = {

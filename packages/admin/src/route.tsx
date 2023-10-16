@@ -48,7 +48,7 @@ const bizPageRoutes: RouteType[] = [
         path: "/crm/customer",
         name: "客户列表",
         needPermissions: ["customer:query"],
-        lazy: () => import("@/views/crm/customer"),
+        lazy: () => import("@/views/crm/customer/customer"),
       },
     ],
   },
