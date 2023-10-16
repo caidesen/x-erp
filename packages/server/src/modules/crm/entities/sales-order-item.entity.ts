@@ -1,6 +1,7 @@
-import { Entity, ManyToOne, Property, Ref, types } from "@mikro-orm/core";
-import { CommonEntity } from "@/common/entity";
+import { Entity, ManyToOne, Property, ref, Ref, types } from "@mikro-orm/core";
+import { CommonEntity, ConstructorVal } from "@/common/entity";
 import { Product } from "@/modules/wms/entities/product.entity";
+import _ from "lodash";
 
 @Entity()
 export class SalesOrderItem extends CommonEntity {
@@ -19,4 +20,11 @@ export class SalesOrderItem extends CommonEntity {
   /** 金额 */
   @Property({ type: types.decimal })
   amount: string;
+
+  constructor(val?: ConstructorVal<SalesOrderItem, "product">) {
+    super();
+    if (!val) return;
+    Object.assign(this, _.pick(val, ["quantity", "price", "amount"]));
+    if (val.product) this.product = ref(Product, val.product.id);
+  }
 }

@@ -13,3 +13,4 @@ export type * from "@/modules/wms/dto/product.dto";
 export type * from "@/modules/wms/dto/warehouse.dto";
 export type * from "@/modules/wms/dto/stock.dto.dto";
 export type * from "@/modules/wms/dto/beginning-stock.dto";
+export type * from "@/modules/crm/dto/sales-order.dto";

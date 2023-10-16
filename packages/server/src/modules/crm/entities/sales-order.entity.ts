@@ -4,13 +4,15 @@ import {
   Enum,
   ManyToOne,
   Property,
+  ref,
   Ref,
 } from "@mikro-orm/core";
-import { CommonEntity } from "@/common/entity";
+import { CommonEntity, ConstructorVal } from "@/common/entity";
 import { Customer } from "@/modules/crm/entities/customer.entity";
 import { User } from "@/modules/system/auth/entities/user.entity";
 import { OrderStatusEnum } from "@/modules/wms/constant/order-status.enum";
 import { SalesOrderItem } from "@/modules/crm/entities/sales-order-item.entity";
+import _ from "lodash";
 
 @Entity()
 export class SalesOrder extends CommonEntity {
@@ -38,8 +40,11 @@ export class SalesOrder extends CommonEntity {
   @ManyToOne(() => SalesOrderItem)
   details = new Collection<SalesOrderItem>(this);
 
-  constructor(val: Partial<SalesOrder>) {
+  constructor(val?: ConstructorVal<SalesOrder, "customer" | "salesperson">) {
     super();
-    Object.assign(this, val);
+    if (!val) return;
+    Object.assign(this, _.omit(val, ["customer", "salesperson", "details"]));
+    if (val.customer) this.customer = ref(Customer, val.customer.id);
+    if (val.salesperson) this.salesperson = ref(User, val.salesperson.id);
   }
 }
