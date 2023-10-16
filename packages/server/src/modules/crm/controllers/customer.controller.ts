@@ -1,5 +1,5 @@
 import { Controller } from "@nestjs/common";
-import { Customer, CustomerContactInfo } from "./entities/customer.entity";
+import { Customer, CustomerContactInfo } from "../entities/customer.entity";
 import { EntityRepository } from "@mikro-orm/postgresql";
 import { InjectRepository } from "@mikro-orm/nestjs";
 import {
@@ -7,14 +7,15 @@ import {
   CustomerVO,
   QueryCustomerInput,
   UpdateCustomerInput,
-} from "./dto/customer.dto";
+} from "../dto/customer.dto";
 import { IdsOnly } from "@/common/dto";
 import { TypedBody, TypedRoute } from "@nestia/core";
-import { QueryOrder, Reference, serialize } from "@mikro-orm/core";
+import { Reference, serialize } from "@mikro-orm/core";
 import _ from "lodash";
 import { User } from "@/modules/system/auth/entities/user.entity";
 import { getPageableParams } from "@/common/helpers/pagination";
-import { queryCondBuilder } from "@/common/query-cond-builder";
+import { queryCondBuilder } from "@/common/db/query-cond-builder";
+import { defaultOrderBy } from "@/common/db/orderBy";
 
 const { Post } = TypedRoute;
 
@@ -48,7 +49,7 @@ export class CustomerController {
       .leftJoinAndSelect("c0.personInChargeUser", "p0")
       .leftJoinAndSelect("c0.contacts", "c1")
       .limit(limit, offset)
-      .orderBy({ createdAt: QueryOrder.DESC, id: QueryOrder.DESC });
+      .orderBy(defaultOrderBy);
     const [list, total] = await qb.where(cond).getResultAndCount();
     return {
       list: serialize(list, {

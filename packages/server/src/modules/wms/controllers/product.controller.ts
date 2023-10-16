@@ -11,7 +11,7 @@ import {
 import { Product } from "@/modules/wms/entities/product.entity";
 import { ProductUnit } from "@/modules/wms/entities/product-uint.entity";
 
-import { queryCondBuilder } from "@/common/query-cond-builder";
+import { queryCondBuilder } from "@/common/db/query-cond-builder";
 import { getPageableParams } from "@/common/helpers/pagination";
 import { LoadStrategy, QueryOrder, ref, serialize } from "@mikro-orm/core";
 import { IdOnly, IdsOnly, PaginationResult } from "@/common/dto";

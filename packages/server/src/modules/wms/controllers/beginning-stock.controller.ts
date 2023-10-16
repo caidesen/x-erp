@@ -8,7 +8,7 @@ import {
   UpdateBeginningStockInput,
 } from "@/modules/wms/dto/beginning-stock.dto";
 import { BeginningStock } from "@/modules/wms/entities/beginning-stock.entity";
-import { queryCondBuilder } from "@/common/query-cond-builder";
+import { queryCondBuilder } from "@/common/db/query-cond-builder";
 import { getPageableParams } from "@/common/helpers/pagination";
 import { PaginationResult } from "@/common/dto";
 import { Serializer } from "@/common/helpers/serialize";
