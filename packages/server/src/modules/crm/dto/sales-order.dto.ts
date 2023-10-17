@@ -8,14 +8,12 @@ export interface SaleOrderItem {
   product: IdOnly;
   quantity: string;
   price: string;
-  amount: string;
 }
 
 export interface CreateSalesOrderInput {
   customer: IdOnly;
   salesperson: IdOnly;
   remarks: string;
-  amount: string;
   details: SaleOrderItem[];
 }
 
@@ -31,5 +29,5 @@ export interface SalesOrderVO {
   salesperson: SimpleUserVO;
   remarks: string;
   amount: string;
-  details: SaleOrderItem & { id: string }[];
+  details: (SaleOrderItem & { id: string })[];
 }

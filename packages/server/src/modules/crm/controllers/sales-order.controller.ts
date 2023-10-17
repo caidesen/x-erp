@@ -16,11 +16,21 @@ import { UpdateCustomerInput } from "@/modules/crm/dto/customer.dto";
 import { OrderStatusEnum } from "@/modules/wms/constant/order-status.enum";
 import { InputException } from "@/common/exception";
 import { IdOnly } from "@/common/dto";
+import { Big } from "big.js";
 import Post = TypedRoute.Post;
 
 @Controller("crm/sales-order")
 export class SalesOrderController {
   constructor(private readonly em: EntityManager) {}
+
+  getAmount(input: CreateSalesOrderInput) {
+    return _.chain(input.details)
+      .map((it) => Big(it.price).times(Big(it.quantity)))
+      .reduce((it) => it.add(it), Big(0))
+      .value()
+      .round(2, Big.roundUp)
+      .toString();
+  }
 
   @Post("list")
   async list(@TypedBody() input: QuerySalesOrderInput) {
@@ -39,6 +49,16 @@ export class SalesOrderController {
   async create(@TypedBody() input: CreateSalesOrderInput) {
     const salesOrder = new SalesOrder(_.omit(input, ["details"]));
     salesOrder.details.set(input.details.map((it) => new SalesOrderItem(it)));
+    let orderAmount = Big(0);
+    for (const detail of salesOrder.details) {
+      const amount = Big(detail.price)
+        .times(Big(detail.quantity))
+        .round(2, Big.roundUp);
+      orderAmount = orderAmount.plus(amount);
+      detail.amount = amount.toString();
+    }
+    salesOrder.amount = orderAmount.toString();
+    salesOrder.status = OrderStatusEnum.SAVED;
     await this.em.persistAndFlush(salesOrder);
   }
 

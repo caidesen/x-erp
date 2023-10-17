@@ -3,6 +3,7 @@ import {
   Entity,
   Enum,
   ManyToOne,
+  OneToMany,
   Property,
   ref,
   Ref,
@@ -37,7 +38,7 @@ export class SalesOrder extends CommonEntity {
   amount: string;
 
   /** 订单明细 */
-  @ManyToOne(() => SalesOrderItem)
+  @OneToMany(() => SalesOrderItem, (item) => item.order)
   details = new Collection<SalesOrderItem>(this);
 
   constructor(val?: ConstructorVal<SalesOrder, "customer" | "salesperson">) {

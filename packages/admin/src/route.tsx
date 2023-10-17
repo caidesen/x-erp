@@ -41,7 +41,7 @@ const bizPageRoutes: RouteType[] = [
   },
   {
     path: "/crm",
-    name: "客户管理",
+    name: "销售管理",
     element: <Outlet />,
     children: [
       {
@@ -49,6 +49,37 @@ const bizPageRoutes: RouteType[] = [
         name: "客户列表",
         needPermissions: ["customer:query"],
         lazy: () => import("@/views/crm/customer/customer"),
+      },
+      {
+        path: "/crm/sales-order",
+        name: "销售单",
+        element: <Outlet />,
+        children: [
+          {
+            path: "/crm/sales-order/list",
+            name: "销售单列表",
+            hideInMenu: true,
+            lazy: () => import("@/views/crm/sales-order/list"),
+          },
+          {
+            path: "/crm/sales-order/create",
+            name: "新建销售单",
+            hideInMenu: true,
+            lazy: () => import("@/views/crm/sales-order/form"),
+          },
+          {
+            path: "/crm/sales-order/:id",
+            name: "销售单详情",
+            hideInMenu: true,
+            lazy: () => import("@/views/crm/sales-order/form"),
+          },
+          {
+            path: "/crm/sales-order/:id/edit",
+            name: "销售单编辑",
+            hideInMenu: true,
+            lazy: () => import("@/views/crm/sales-order/form"),
+          },
+        ],
       },
     ],
   },

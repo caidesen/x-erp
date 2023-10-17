@@ -4,35 +4,36 @@ import React, { useState } from "react";
 import { ModalForm, ProTable } from "@ant-design/pro-components";
 import { api, API } from "@/api";
 
-type ProductValue = Pick<API.ProductVO, "id" | "name" | "baseUnit">;
+type CustomerValue = Pick<API.CustomerVO, "id" | "shortName">;
 
-export interface ProductSelectorProps {
+export interface CustomerSelectorProps {
   className?: string;
-  value?: ProductValue;
-  onChange?: (val: ProductValue) => void;
+  value?: CustomerValue;
+  onChange?: (val: CustomerValue) => void;
   disableIds?: string | string[];
-  onSelect?: (val: ProductValue) => void;
+  onSelect?: (val: CustomerValue) => void;
   disabled?: boolean;
 }
 
 interface TableProps {
-  value?: ProductValue;
-  onChange?: (val: ProductValue) => void;
+  value?: CustomerValue;
+  onChange?: (val: CustomerValue) => void;
   disableIds?: string | string[];
 }
 
 function Table(props: TableProps) {
   return (
-    <ProTable<API.ProductVO>
+    <ProTable<API.CustomerVO>
       rowKey="id"
       request={async (data) => {
-        const { list, total } = await api.wms.product.list(data);
+        const { list, total } = await api.crm.customer.list(data);
         return {
           success: true,
           total,
           data: list,
         };
       }}
+      scroll={{ y: "calc(100vh - 600px)" }}
       rowSelection={{
         type: "radio",
         selectedRowKeys: props.value ? [props.value.id] : [],
@@ -40,12 +41,15 @@ function Table(props: TableProps) {
           props.onChange?.(selectedRows[0]);
         },
       }}
-      pagination={false}
       size="small"
       columns={[
         {
-          title: "商品名称",
-          dataIndex: "name",
+          title: "简称",
+          dataIndex: "shortName",
+        },
+        {
+          title: "客户名称",
+          dataIndex: "fullName",
         },
         {
           title: "备注",
@@ -57,7 +61,7 @@ function Table(props: TableProps) {
   );
 }
 
-export function ProductSelector(props: ProductSelectorProps) {
+export function CustomerSelector(props: CustomerSelectorProps) {
   const className = props.className ?? "";
   const [visible, setVisible] = useState(false);
   const selectRef = React.useRef<RefSelectProps>(null);
@@ -69,23 +73,24 @@ export function ProductSelector(props: ProductSelectorProps) {
         className={`${className}`}
         popupClassName="hidden"
         disabled={props.disabled}
-        options={[{ value: props.value?.id, label: props.value?.name }]}
+        options={[{ value: props.value?.id, label: props.value?.shortName }]}
         onFocus={() => {
           setVisible(true);
           selectRef.current?.blur();
         }}
       />
-      <ModalForm<{ val: ProductValue }>
+      <ModalForm<{ val: CustomerValue }>
         open={visible}
-        title="选择商品"
+        title="选择客户"
         onOpenChange={setVisible}
-        width={600}
+        width={800}
         modalProps={{
           destroyOnClose: true,
         }}
         initialValues={{
-          unitId: props.value,
+          val: props.value,
         }}
+        layout={"horizontal"}
         onFinish={async (values) => {
           props.onChange?.(values.val);
           props.onSelect?.(values.val);

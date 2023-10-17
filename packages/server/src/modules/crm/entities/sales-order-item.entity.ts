@@ -2,9 +2,12 @@ import { Entity, ManyToOne, Property, ref, Ref, types } from "@mikro-orm/core";
 import { CommonEntity, ConstructorVal } from "@/common/entity";
 import { Product } from "@/modules/wms/entities/product.entity";
 import _ from "lodash";
+import { SalesOrder } from "@/modules/crm/entities/sales-order.entity";
 
 @Entity()
 export class SalesOrderItem extends CommonEntity {
+  @ManyToOne(() => SalesOrder, { ref: true })
+  order: Ref<SalesOrder>;
   /** 物料 */
   @ManyToOne(() => Product, { ref: true })
   product: Ref<Product>;

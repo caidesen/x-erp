@@ -61,10 +61,26 @@ const api = {
       update: defineAPI<API.UpdateCustomerInput, void>("crm/customer/update"),
       batchRemove: defineAPI<API.IdsOnly, void>("crm/customer/batchRemove"),
     },
+    salesOrder: {
+      list: defineAPI<
+        API.QuerySalesOrderInput,
+        API.PaginationResult<API.SalesOrderVO>
+      >("crm/sales-order/list"),
+      create: defineAPI<API.CreateSalesOrderInput, void>(
+        "crm/sales-order/create"
+      ),
+      update: defineAPI<API.UpdateSalesOrderInput, void>(
+        "crm/sales-order/update"
+      ),
+      submit: defineAPI<API.IdOnly, void>("crm/sales-order/submit"),
+      approve: defineAPI<API.IdOnly, void>("crm/sales-order/approve"),
+      reject: defineAPI<API.IdOnly, void>("crm/sales-order/reject"),
+      cancel: defineAPI<API.IdOnly, void>("crm/sales-order/cancel"),
+    },
   },
   wms: {
     warehouse: {
-      all: defineAPI<void, API.WarehouseVO[]>("wms/warehouse/all"),
+      all: defineQueryAPI<void, API.WarehouseVO[]>("wms/warehouse/all"),
       create: defineAPI<API.CreateWarehouseInput, void>("wms/warehouse/create"),
       update: defineAPI<API.UpdateWarehouseInput, void>("wms/warehouse/update"),
       batchRemove: defineAPI<API.IdsOnly, void>("wms/warehouse/batchRemove"),
