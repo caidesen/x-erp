@@ -38,7 +38,12 @@ export class SalesOrderController {
     const [list, total] = await this.em.findAndCount(
       SalesOrder,
       {},
-      { orderBy: defaultOrderBy, limit, offset }
+      {
+        populate: ["customer", "salesperson"],
+        orderBy: defaultOrderBy,
+        limit,
+        offset,
+      }
     );
     return Serializer(list, {
       populate: true,

@@ -5,7 +5,7 @@ import { SimpleUserVO } from "@/modules/system/auth/dto/user.dto";
 
 export interface SaleOrderItem {
   id?: string;
-  product: IdOnly;
+  product: { id: string };
   quantity: string;
   price: string;
 }
@@ -24,10 +24,10 @@ export interface UpdateSalesOrderInput extends Partial<CreateSalesOrderInput> {
 export interface QuerySalesOrderInput extends PageableQueryInput {}
 
 export interface SalesOrderVO {
-  customer: CustomerVO;
+  customer: Omit<CustomerVO, "contacts" | "personInChargeUser">;
   status: OrderStatusEnum;
   salesperson: SimpleUserVO;
   remarks: string;
   amount: string;
-  details: (SaleOrderItem & { id: string })[];
+  // details: (SaleOrderItem & { id: string })[];
 }

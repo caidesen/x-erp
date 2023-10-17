@@ -1,5 +1,6 @@
 import { PageableQueryInput } from "@/common/dto";
 import { tags } from "typia";
+import { UnitVO } from "@/modules/system/config/unit/dto/unit.dto";
 
 export interface QueryProductInput extends PageableQueryInput {
   name?: string;
@@ -9,10 +10,7 @@ export interface ProductVO {
   id: string;
   name: string;
   remarks: string;
-  baseUnit: {
-    id: string;
-    name: string;
-  };
+  baseUnit: UnitVO;
   multiUnitEnabled: boolean;
 }
 
