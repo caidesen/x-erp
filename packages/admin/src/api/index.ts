@@ -66,6 +66,9 @@ const api = {
         API.QuerySalesOrderInput,
         API.PaginationResult<API.SalesOrderVO>
       >("crm/sales-order/list"),
+      detail: defineQueryAPI<API.IdOnly, API.SalesOrderDetailVO>(
+        "crm/sales-order/detail"
+      ),
       create: defineAPI<API.CreateSalesOrderInput, void>(
         "crm/sales-order/create"
       ),

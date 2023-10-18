@@ -28,14 +28,14 @@ export function Component() {
           { dataIndex: "status", title: "状态", valueEnum: OrderStatusName },
           { dataIndex: "remarks", title: "备注", valueType: "textarea" },
           {
-            dataIndex: "actions",
             title: "操作",
-            valueType: "option",
+            valueType: "",
             render: (dom, entity) => [
               <Link to={`/crm/sales-order/${entity.id}`} key="detail">
                 详单
               </Link>,
               <Dropdown
+                key="more"
                 menu={{
                   items: [
                     {
@@ -47,7 +47,7 @@ export function Component() {
                       label: "提交",
                     },
                     {
-                      key: "submit",
+                      key: "approve",
                       label: "审核",
                     },
                     {
@@ -60,7 +60,9 @@ export function Component() {
                     },
                   ],
                 }}
-              ></Dropdown>,
+              >
+                <a>操作</a>
+              </Dropdown>,
             ],
           },
         ]}
