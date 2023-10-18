@@ -24,10 +24,14 @@ export interface UpdateSalesOrderInput extends Partial<CreateSalesOrderInput> {
 export interface QuerySalesOrderInput extends PageableQueryInput {}
 
 export interface SalesOrderVO {
+  id: string;
   customer: Omit<CustomerVO, "contacts" | "personInChargeUser">;
   status: OrderStatusEnum;
   salesperson: SimpleUserVO;
   remarks: string;
   amount: string;
-  // details: (SaleOrderItem & { id: string })[];
+}
+
+export interface SalesOrderDetailVO extends SalesOrderVO {
+  details: (SaleOrderItem & { id: string })[];
 }

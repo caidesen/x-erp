@@ -32,6 +32,9 @@ importers:
       antd:
         specifier: ^5.4.6
         version: 5.4.6(react-dom@18.2.0)(react@18.2.0)
+      big.js:
+        specifier: ^6.2.1
+        version: 6.2.1
       lodash:
         specifier: ^4.17.21
         version: 4.17.21
@@ -48,6 +51,9 @@ importers:
       '@nest-admin/server':
         specifier: workspace:*
         version: link:../server
+      '@types/big.js':
+        specifier: ^6.2.0
+        version: 6.2.0
       '@types/lodash':
         specifier: ^4.14.194
         version: 4.14.194

@@ -8,7 +8,7 @@ import {
   ProFormGroup,
   ProFormTextArea,
 } from "@ant-design/pro-components";
-import { Card, Form, Input } from "antd";
+import { Button, Card, Form, Input, Space } from "antd";
 import { CustomerSelector } from "@/views/crm/components/CustomerSelector";
 import { ProFormUserSelector } from "@/shared/components/UserSelector";
 import React, { useRef, useState } from "react";
@@ -20,60 +20,75 @@ type TableRow = API.SaleOrderItem & {
   amount: string;
   product: Partial<API.ProductVO>;
 };
-type FormDataType = API.CreateSalesOrderInput;
+type FormDataType = API.SalesOrderDetailVO;
 
 export function Component() {
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>();
   const editableFormRef = useRef<EditableFormInstance<TableRow>>();
-  const genRowValue = (record: TableRow) => {
-    if (!record.product.baseUnit) return;
-    const values = [
-      toBig(record.quantity)!,
-      toBig(record.price)!,
-      toBig(record.amount)!,
-    ] as const;
-    if (_.reject(values, _.isNil).length !== 2) return;
-    let [quantity, price, amount] = values;
-    quantity = quantity?.round(record.product.baseUnit.decimals);
-    price = price?.round(2);
-    amount = amount?.round(2);
-    if (!amount) {
-      amount = quantity.times(price).round(2);
-    } else if (!price) {
-      price = amount.div(quantity).round(2);
-    } else {
-      quantity = amount.div(price).round(2);
-    }
-    return {
-      amount,
-      price,
-      quantity,
-    };
-  };
   return (
     <PageContainer>
       <Card>
         <ProForm<FormDataType>
+          initialValues={{
+            customer: {},
+            salesperson: {},
+            remarks: "",
+            details: [],
+          }}
           submitter={{
-            render: (_, dom) => <FooterToolbar>{dom}</FooterToolbar>,
+            submitButtonProps: {
+              children: "保存",
+              title: "保存",
+            },
+            render: (form, dom) => (
+              <FooterToolbar>
+                <Space>
+                  <Button onClick={form.reset}>重置</Button>
+                  <Button
+                    type="primary"
+                    htmlType="submit"
+                    onClick={form.submit}
+                  >
+                    保存
+                  </Button>
+                </Space>
+              </FooterToolbar>
+            ),
           }}
           onFinish={async (values) => {
-            await api.crm.salesOrder.create(values);
+            const data = {
+              ...values,
+              customer: _.pick(values.customer, ["id"]),
+              salesperson: _.pick(values.salesperson, ["id"]),
+              details: values.details.map((it) => ({
+                ..._.pick(it, ["quantity", "price"]),
+                product: _.pick(it.product, ["id"]),
+              })),
+            };
+            await api.crm.salesOrder.create(data);
           }}
         >
           <ProFormGroup title="基础信息">
-            <Form.Item name="customer" label="关联客户">
+            <Form.Item
+              name="customer"
+              label="关联客户"
+              rules={[{ required: true, message: "请选择客户" }]}
+            >
               <CustomerSelector className="pro-field-md" />
             </Form.Item>
             <ProFormUserSelector
               name={["salesperson", "id"]}
               label="业务员"
               width="md"
+              rules={[{ required: true, message: "请选择业务员" }]}
             />
             <ProFormTextArea width="md" name="remarks" label="备注" />
           </ProFormGroup>
           <ProFormGroup title="详单">
-            <Form.Item name="details">
+            <Form.Item
+              name="details"
+              rules={[{ required: true, message: "请继续完善" }]}
+            >
               <EditableProTable<TableRow>
                 rowKey="id"
                 editable={{
@@ -98,6 +113,9 @@ export function Component() {
                   {
                     dataIndex: "product",
                     title: "商品",
+                    formItemProps: {
+                      rules: [{ required: true, message: "请输入数量" }],
+                    },
                     renderFormItem: (dom, { record }) => {
                       return <ProductSelector />;
                     },
@@ -106,6 +124,9 @@ export function Component() {
                   {
                     dataIndex: "quantity",
                     title: "数量",
+                    formItemProps: {
+                      rules: [{ required: true, message: "请输入数量" }],
+                    },
                     renderFormItem: ({ fieldProps }, { record, recordKey }) => {
                       return (
                         <Input
@@ -152,6 +173,9 @@ export function Component() {
                   {
                     dataIndex: "price",
                     title: "单价",
+                    formItemProps: {
+                      rules: [{ required: true, message: "请输入单价" }],
+                    },
                     renderFormItem: ({ fieldProps }, { record }) => {
                       const unit = record?.product.baseUnit;
                       const suffix = unit
@@ -202,6 +226,9 @@ export function Component() {
                   {
                     dataIndex: "amount",
                     title: "金额",
+                    formItemProps: {
+                      rules: [{ required: true, message: "请输入金额" }],
+                    },
                     renderFormItem: ({ fieldProps, dataIndex }, { record }) => {
                       return (
                         <Input
