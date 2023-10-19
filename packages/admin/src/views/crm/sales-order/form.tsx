@@ -16,9 +16,9 @@ import { ProductSelector } from "@/views/wms/components/ProductSelector";
 import _ from "lodash";
 import { toBig } from "@/shared/lib/math";
 
-type TableRow = API.SaleOrderItem & {
+type TableRow = Omit<API.SaleOrderItem, "product"> & {
   amount: string;
-  product: Partial<API.ProductVO>;
+  product?: API.ProductVO;
 };
 type FormDataType = API.SalesOrderDetailVO;
 
@@ -101,9 +101,7 @@ export function Component() {
                 recordCreatorProps={{
                   record: () => ({
                     id: _.uniqueId("new_"),
-                    product: {
-                      id: "",
-                    },
+                    product: undefined,
                     quantity: "",
                     amount: "",
                     price: "",
@@ -131,7 +129,7 @@ export function Component() {
                       return (
                         <Input
                           {...fieldProps}
-                          suffix={record?.product.baseUnit?.name}
+                          suffix={record?.product?.baseUnit?.name}
                           allowClear
                           onBlur={(e) => {
                             if (!record || !editableFormRef.current) return;
@@ -142,7 +140,7 @@ export function Component() {
                                 val
                               );
                             const quantity = toBig(e.target.value, "0").round(
-                              record.product.baseUnit?.decimals ?? 0
+                              record.product?.baseUnit?.decimals ?? 0
                             );
                             update({ quantity: quantity.toString() });
                             if (record.price) {
@@ -168,7 +166,7 @@ export function Component() {
                       );
                     },
                     render: (dom, record) =>
-                      record.quantity + record.product.baseUnit?.name,
+                      record.quantity + record.product?.baseUnit?.name,
                   },
                   {
                     dataIndex: "price",
@@ -177,9 +175,9 @@ export function Component() {
                       rules: [{ required: true, message: "请输入单价" }],
                     },
                     renderFormItem: ({ fieldProps }, { record }) => {
-                      const unit = record?.product.baseUnit;
+                      const unit = record?.product?.baseUnit;
                       const suffix = unit
-                        ? `元/${record.product.baseUnit?.name}`
+                        ? `元/${record.product?.baseUnit?.name}`
                         : "元";
                       return (
                         <Input
@@ -205,7 +203,7 @@ export function Component() {
                             } else if (record.amount) {
                               const quantity = toBig(record.amount, "0")
                                 .div(price)
-                                .round(record.product.baseUnit?.decimals ?? 0);
+                                .round(record.product?.baseUnit?.decimals ?? 0);
                               const amount = quantity.times(price).toFixed(2);
                               update({
                                 amount,
@@ -217,8 +215,8 @@ export function Component() {
                       );
                     },
                     render: (dom, record) => {
-                      if (record.product.baseUnit) {
-                        return `${record.price}元/${record.product.baseUnit?.name}`;
+                      if (record.product?.baseUnit) {
+                        return `${record.price}元/${record.product?.baseUnit?.name}`;
                       }
                       return `${record.price}元`;
                     },
@@ -259,7 +257,7 @@ export function Component() {
                               const price = toBig(record.price, "0");
                               const quantity = amount
                                 .div(price)
-                                .round(record.product.baseUnit?.decimals ?? 0);
+                                .round(record.product?.baseUnit?.decimals ?? 0);
                               update({
                                 quantity: quantity.toString(),
                                 amount: quantity.times(price).toFixed(2),

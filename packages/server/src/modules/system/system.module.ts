@@ -8,10 +8,16 @@ import { RoleController } from "./auth/controllers/role.controller";
 import { UserController } from "./auth/controllers/user.controller";
 import { AuthController } from "./auth/controllers/auth.controller";
 import { ConfigModule } from "@/modules/system/config/config.module";
+import { CodeModule } from "@/modules/system/code/code.module";
 
 @Module({
-  imports: [MikroOrmModule.forFeature([User, Account, Role]), ConfigModule],
+  imports: [
+    MikroOrmModule.forFeature([User, Account, Role]),
+    ConfigModule,
+    CodeModule,
+  ],
   providers: [UserService],
   controllers: [RoleController, UserController, AuthController],
+  exports: [CodeModule],
 })
 export class SystemModule {}

@@ -9,9 +9,11 @@ import { CustomerController } from "./controllers/customer.controller";
 import { SalesOrder } from "@/modules/crm/entities/sales-order.entity";
 import { SalesOrderItem } from "@/modules/crm/entities/sales-order-item.entity";
 import { SalesOrderController } from "@/modules/crm/controllers/sales-order.controller";
+import { CodeModule } from "@/modules/system/code/code.module";
 
 @Module({
   imports: [
+    CodeModule,
     MikroOrmModule.forFeature([
       Customer,
       CustomerContactInfo,

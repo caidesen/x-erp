@@ -4,6 +4,7 @@ import { TypedBody, TypedRoute } from "@nestia/core";
 import {
   CreateSalesOrderInput,
   QuerySalesOrderInput,
+  SalesOrderDetailVO,
   SalesOrderVO,
 } from "@/modules/crm/dto/sales-order.dto";
 import { SalesOrder } from "@/modules/crm/entities/sales-order.entity";
@@ -17,20 +18,15 @@ import { OrderStatusEnum } from "@/modules/wms/constant/order-status.enum";
 import { InputException } from "@/common/exception";
 import { IdOnly } from "@/common/dto";
 import { Big } from "big.js";
+import { CodeService } from "@/modules/system/code/code.service";
 import Post = TypedRoute.Post;
 
 @Controller("crm/sales-order")
 export class SalesOrderController {
-  constructor(private readonly em: EntityManager) {}
-
-  getAmount(input: CreateSalesOrderInput) {
-    return _.chain(input.details)
-      .map((it) => Big(it.price).times(Big(it.quantity)))
-      .reduce((it) => it.add(it), Big(0))
-      .value()
-      .round(2, Big.roundUp)
-      .toString();
-  }
+  constructor(
+    private readonly em: EntityManager,
+    private readonly codeService: CodeService
+  ) {}
 
   @Post("list")
   async list(@TypedBody() input: QuerySalesOrderInput) {
@@ -50,9 +46,22 @@ export class SalesOrderController {
     }).toPaginationResult<SalesOrderVO>(total);
   }
 
+  @Post("detail")
+  async detail(@TypedBody() input: IdOnly) {
+    const salesOrder = await this.em.findOneOrFail(
+      SalesOrder,
+      _.pick(input, "id"),
+      { populate: true }
+    );
+    return Serializer(salesOrder, {
+      populate: true,
+    }).toVO<SalesOrderDetailVO>();
+  }
+
   @Post("create")
   async create(@TypedBody() input: CreateSalesOrderInput) {
     const salesOrder = new SalesOrder(_.omit(input, ["details"]));
+    salesOrder.id = await this.codeService.generateCode("sales-order");
     salesOrder.details.set(input.details.map((it) => new SalesOrderItem(it)));
     let orderAmount = Big(0);
     for (const detail of salesOrder.details) {

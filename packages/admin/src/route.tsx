@@ -71,7 +71,7 @@ const bizPageRoutes: RouteType[] = [
             path: "/crm/sales-order/:id",
             name: "销售单详情",
             hideInMenu: true,
-            lazy: () => import("@/views/crm/sales-order/form"),
+            lazy: () => import("@/views/crm/sales-order/detail"),
           },
           {
             path: "/crm/sales-order/:id/edit",

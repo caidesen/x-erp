@@ -2,19 +2,23 @@ import { IdOnly, PageableQueryInput } from "@/common/dto";
 import { CustomerVO } from "@/modules/crm/dto/customer.dto";
 import { OrderStatusEnum } from "@/modules/wms/constant/order-status.enum";
 import { SimpleUserVO } from "@/modules/system/auth/dto/user.dto";
+import { ProductVO } from "@/modules/wms/dto/product.dto";
 
 export interface SaleOrderItem {
-  id?: string;
-  product: { id: string };
+  id: string;
+  product: ProductVO;
   quantity: string;
   price: string;
+  amount: string;
 }
 
 export interface CreateSalesOrderInput {
   customer: IdOnly;
   salesperson: IdOnly;
   remarks: string;
-  details: SaleOrderItem[];
+  details: (Omit<SaleOrderItem, "id" | "product"> & {
+    product: { id: string };
+  })[];
 }
 
 export interface UpdateSalesOrderInput extends Partial<CreateSalesOrderInput> {
