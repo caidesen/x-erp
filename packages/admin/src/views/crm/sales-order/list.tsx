@@ -40,7 +40,11 @@ export function Component() {
                   items: [
                     {
                       key: "edit",
-                      label: "编辑",
+                      label: (
+                        <Link to={`/crm/sales-order/${entity.id}/edit`}>
+                          编辑
+                        </Link>
+                      ),
                     },
                     {
                       key: "submit",

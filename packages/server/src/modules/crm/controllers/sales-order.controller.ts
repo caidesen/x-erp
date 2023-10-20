@@ -6,6 +6,7 @@ import {
   QuerySalesOrderInput,
   SalesOrderDetailVO,
   SalesOrderVO,
+  UpdateSalesOrderInput,
 } from "@/modules/crm/dto/sales-order.dto";
 import { SalesOrder } from "@/modules/crm/entities/sales-order.entity";
 import { getPageableParams } from "@/common/helpers/pagination";
@@ -13,19 +14,19 @@ import { Serializer } from "@/common/helpers/serialize";
 import { defaultOrderBy } from "@/common/db/orderBy";
 import _ from "lodash";
 import { SalesOrderItem } from "@/modules/crm/entities/sales-order-item.entity";
-import { UpdateCustomerInput } from "@/modules/crm/dto/customer.dto";
 import { OrderStatusEnum } from "@/modules/wms/constant/order-status.enum";
 import { InputException } from "@/common/exception";
 import { IdOnly } from "@/common/dto";
-import { Big } from "big.js";
 import { CodeService } from "@/modules/system/code/code.service";
+import { SalesOrderService } from "@/modules/crm/service/sales-order.service";
 import Post = TypedRoute.Post;
 
 @Controller("crm/sales-order")
 export class SalesOrderController {
   constructor(
     private readonly em: EntityManager,
-    private readonly codeService: CodeService
+    private readonly codeService: CodeService,
+    private readonly salesOrderService: SalesOrderService
   ) {}
 
   @Post("list")
@@ -63,27 +64,21 @@ export class SalesOrderController {
     const salesOrder = new SalesOrder(_.omit(input, ["details"]));
     salesOrder.id = await this.codeService.generateCode("sales-order");
     salesOrder.details.set(input.details.map((it) => new SalesOrderItem(it)));
-    let orderAmount = Big(0);
-    for (const detail of salesOrder.details) {
-      const amount = Big(detail.price)
-        .times(Big(detail.quantity))
-        .round(2, Big.roundUp);
-      orderAmount = orderAmount.plus(amount);
-      detail.amount = amount.toString();
-    }
-    salesOrder.amount = orderAmount.toString();
+    this.salesOrderService.computeOrderAmount(salesOrder);
     salesOrder.status = OrderStatusEnum.SAVED;
     await this.em.persistAndFlush(salesOrder);
   }
 
   @Post("update")
-  async update(@TypedBody() input: UpdateCustomerInput) {
+  async update(@TypedBody() input: UpdateSalesOrderInput) {
     const salesOrder = await this.em.findOneOrFail(SalesOrder, input.id);
     if (salesOrder.status !== OrderStatusEnum.SAVED)
       throw new InputException(
         "只有处于已保存未提交的销售单才可以修改销售单内容"
       );
-    this.em.assign(salesOrder, input);
+    this.em.assign(salesOrder, _.omit(input, ["id", "details"]));
+    salesOrder.details.set(input.details.map((it) => new SalesOrderItem(it)));
+    this.salesOrderService.computeOrderAmount(salesOrder);
     await this.em.flush();
   }
 

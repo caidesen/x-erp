@@ -10,6 +10,7 @@ import { SalesOrder } from "@/modules/crm/entities/sales-order.entity";
 import { SalesOrderItem } from "@/modules/crm/entities/sales-order-item.entity";
 import { SalesOrderController } from "@/modules/crm/controllers/sales-order.controller";
 import { CodeModule } from "@/modules/system/code/code.module";
+import { SalesOrderService } from "@/modules/crm/service/sales-order.service";
 
 @Module({
   imports: [
@@ -22,6 +23,7 @@ import { CodeModule } from "@/modules/system/code/code.module";
       SalesOrderItem,
     ]),
   ],
+  providers: [SalesOrderService],
   controllers: [CustomerController, SalesOrderController],
 })
 export class CRMModule {}

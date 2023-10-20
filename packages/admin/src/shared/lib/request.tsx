@@ -1,8 +1,15 @@
 import type {
   DefinedUseQueryResult,
+  UseMutationOptions,
+  UseMutationResult,
   UseQueryOptions,
 } from "@tanstack/react-query";
-import { QueryClient, useQuery, UseQueryResult } from "@tanstack/react-query";
+import {
+  QueryClient,
+  useMutation,
+  useQuery,
+  UseQueryResult,
+} from "@tanstack/react-query";
 import { message } from "antd";
 
 export async function request(url: string, options?: RequestInit) {
@@ -65,6 +72,12 @@ interface IQueryApi<P, R> extends IApi<P, R> {
   ): UseQueryResult<R>;
 }
 
+interface IMutationApi<P, R> extends IApi<P, R> {
+  useMutation(
+    options?: Omit<UseMutationOptions<R, Error, P>, "queryKey" | "queryFn">
+  ): UseMutationResult<R, Error, P>;
+}
+
 export function defineAPI<P, R>(url: string): IApi<P, R> {
   const fn = function (params: P, options?: RequestInit) {
     return request(url, {
@@ -87,6 +100,20 @@ export function defineQueryAPI<P, R>(url: string): IQueryApi<P, R> {
       ...options,
       queryKey: [url, params],
       queryFn: (a) => fn(params, { signal: a.signal }),
+    });
+  return fn;
+}
+
+export function defineMutationAPI<P, R>(url: string): IMutationApi<P, R> {
+  const fn = defineAPI(url) as IMutationApi<P, R>;
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore
+  fn.useMutation = (options?) =>
+    // eslint-disable-next-line react-hooks/rules-of-hooks
+    useMutation<R, Error, P>({
+      ...options,
+      mutationKey: [url],
+      mutationFn: (params: P) => fn(params),
     });
   return fn;
 }

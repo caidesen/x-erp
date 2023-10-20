@@ -6,6 +6,7 @@ import {
   PageContainer,
   ProForm,
   ProFormGroup,
+  ProFormInstance,
   ProFormTextArea,
 } from "@ant-design/pro-components";
 import { Button, Card, Form, Input, Space } from "antd";
@@ -15,6 +16,7 @@ import React, { useRef, useState } from "react";
 import { ProductSelector } from "@/views/wms/components/ProductSelector";
 import _ from "lodash";
 import { toBig } from "@/shared/lib/math";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 
 type TableRow = Omit<API.SaleOrderItem, "product"> & {
   amount: string;
@@ -22,9 +24,26 @@ type TableRow = Omit<API.SaleOrderItem, "product"> & {
 };
 type FormDataType = API.SalesOrderDetailVO;
 
-export function Component() {
+export function Component(props: any) {
+  const params = useParams<{ id: string }>();
+  const location = useLocation();
+  const navigate = useNavigate();
   const [editableKeys, setEditableRowKeys] = useState<React.Key[]>();
   const editableFormRef = useRef<EditableFormInstance<TableRow>>();
+  const formRef = useRef<ProFormInstance<FormDataType>>();
+  /** 提交前的转换 */
+  const convertValues = (values: FormDataType) => {
+    return {
+      ...values,
+      customer: _.pick(values.customer, ["id"]),
+      salesperson: _.pick(values.salesperson, ["id"]),
+      details: values.details.map((it) => ({
+        ..._.pick(it, ["quantity", "price"]),
+        product: _.pick(it.product, ["id"]),
+      })),
+    };
+  };
+
   return (
     <PageContainer>
       <Card>
@@ -35,6 +54,12 @@ export function Component() {
             remarks: "",
             details: [],
           }}
+          formRef={formRef}
+          request={
+            location.pathname !== "/crm/sales-order/create"
+              ? () => api.crm.salesOrder.detail({ id: params.id! })
+              : undefined
+          }
           submitter={{
             submitButtonProps: {
               children: "保存",
@@ -56,16 +81,11 @@ export function Component() {
             ),
           }}
           onFinish={async (values) => {
-            const data = {
-              ...values,
-              customer: _.pick(values.customer, ["id"]),
-              salesperson: _.pick(values.salesperson, ["id"]),
-              details: values.details.map((it) => ({
-                ..._.pick(it, ["quantity", "price"]),
-                product: _.pick(it.product, ["id"]),
-              })),
-            };
-            await api.crm.salesOrder.create(data);
+            await api.crm.salesOrder.create(convertValues(values));
+            navigate("/crm/sales-order/list", {
+              replace: true,
+            });
+            return true;
           }}
         >
           <ProFormGroup title="基础信息">
@@ -117,7 +137,7 @@ export function Component() {
                     renderFormItem: (dom, { record }) => {
                       return <ProductSelector />;
                     },
-                    renderText: (text) => text.name,
+                    renderText: (text) => text?.name,
                   },
                   {
                     dataIndex: "quantity",

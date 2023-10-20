@@ -36,24 +36,6 @@ class SystemSeeder extends Seeder {
 }
 
 /**
- * 客户工厂
- */
-export class CustomerFactory extends Factory<Customer> {
-  model = Customer;
-
-  definition(faker: Faker): Partial<Customer> {
-    faker.setLocale("zh_CN");
-    return {
-      fullName: faker.company.name(),
-      shortName: faker.company.companySuffix(),
-      property: faker.company.bs(),
-      region: faker.address.country(),
-      remarks: faker.lorem.sentence(),
-    };
-  }
-}
-
-/**
  * 客户联系人工厂
  */
 export class CustomerContactInfoFactory extends Factory<CustomerContactInfo> {
@@ -74,11 +56,32 @@ export class CustomerContactInfoFactory extends Factory<CustomerContactInfo> {
  */
 class CustomerSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
-    new CustomerFactory(em)
-      .each((it) => {
-        it.contacts.set(new CustomerContactInfoFactory(em).make(5));
+    const list = [
+      {
+        shortName: "武汉中地",
+        fullName: "武汉中地数码科技有限公司",
+        remarks: "测试客户",
+        region: "武汉",
+        personInChargeUser: ref(User, "1"),
+        property: "长期客户",
+      },
+      {
+        shortName: "腾讯",
+        fullName: "腾讯控股有限公司",
+        remarks: "测试客户",
+        region: "深圳",
+        personInChargeUser: ref(User, "1"),
+        property: "长期客户",
+      },
+    ];
+    await em.persistAndFlush(
+      list.map((it) => {
+        const customer = new Customer();
+        Object.assign(customer, it);
+        customer.contacts.set(new CustomerContactInfoFactory(em).make(5));
+        return customer;
       })
-      .make(100);
+    );
   }
 }
 
@@ -113,30 +116,31 @@ class ConfigSeeder extends Seeder {
   }
 }
 
-class ProductFactory extends Factory<Product> {
-  model = Product;
-
-  protected definition(faker: Faker): EntityData<Product> {
-    faker.setLocale("zh_CN");
-    return {
-      name: faker.commerce.productName(),
-      remarks: faker.commerce.productDescription(),
-      multiUnitEnabled: true,
-    };
-  }
-}
-
 class ProductSeeder extends Seeder {
   async run(em: EntityManager): Promise<void> {
     const unit = await em.findOne(Unit, { name: "个" });
     if (!unit) {
       throw new Error("未找到默认的计量单位");
     }
-    new ProductFactory(em)
-      .each((it) => {
-        it.baseUnit = ref(unit);
+    const list: Partial<Product>[] = [
+      {
+        name: "苹果",
+        remarks: "苹果",
+        multiUnitEnabled: false,
+      },
+      {
+        name: "香蕉",
+        remarks: "香蕉",
+        multiUnitEnabled: false,
+      },
+    ];
+    await em.persistAndFlush(
+      list.map((it) => {
+        const product = new Product(it);
+        product.baseUnit = ref(unit);
+        return product;
       })
-      .make(10);
+    );
   }
 }
 

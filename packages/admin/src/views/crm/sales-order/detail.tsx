@@ -1,4 +1,5 @@
 import {
+  FooterToolbar,
   PageContainer,
   ProDescriptions,
   ProTable,
@@ -6,9 +7,8 @@ import {
 import { api } from "@/api";
 import { useNavigate, useParams } from "react-router-dom";
 import _ from "lodash";
-import { Card, Table } from "antd";
+import { Button, Card, Table } from "antd";
 import { OrderStatusName } from "@/shared/constant/order-status";
-import { useMemo } from "react";
 import { toBig } from "@/shared";
 
 export function Component() {
@@ -19,24 +19,47 @@ export function Component() {
       enabled: !_.isNil(id),
     }
   );
-  const extra = useMemo(() => {
-    if (!data) return "";
-  }, [data]);
   const navigate = useNavigate();
   return (
     <PageContainer onBack={() => navigate(-1)}>
       <Card>
+        <FooterToolbar>
+          <Button type="primary">操作</Button>
+        </FooterToolbar>
         <ProDescriptions
+          // extra={
+          //   <Dropdown
+          //     menu={{
+          //       items: [],
+          //     }}
+          //   >
+          //     <Button>操作</Button>
+          //   </Dropdown>
+          // }
+          title="销售单"
           loading={isLoading}
           dataSource={data}
-          column={3}
-          extra={extra}
+          column={2}
           columns={[
             { dataIndex: "id", title: "编号" },
-            { dataIndex: "status", title: "状态", valueEnum: OrderStatusName },
+            {
+              dataIndex: "status",
+              title: "业务状态",
+              valueEnum: OrderStatusName,
+            },
             { dataIndex: ["customer", "shortName"], title: "客户" },
             { dataIndex: ["salesperson", "nickname"], title: "业务员" },
             { dataIndex: "amount", title: "金额", valueType: "money" },
+            {
+              dataIndex: "createdAt",
+              title: "创建时间",
+              valueType: "dateTime",
+            },
+            {
+              dataIndex: "updatedAt",
+              title: "更新时间",
+              valueType: "dateTime",
+            },
             { dataIndex: "remarks", title: "备注", span: 3 },
           ]}
         ></ProDescriptions>
@@ -46,6 +69,7 @@ export function Component() {
           dataSource={data?.details}
           bordered
           pagination={false}
+          rowKey="id"
           summary={() => {
             return (
               <Table.Summary.Row>

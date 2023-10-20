@@ -16,12 +16,14 @@ export interface CreateSalesOrderInput {
   customer: IdOnly;
   salesperson: IdOnly;
   remarks: string;
-  details: (Omit<SaleOrderItem, "id" | "product"> & {
-    product: { id: string };
-  })[];
+  details: {
+    product: IdOnly;
+    quantity: string;
+    price: string;
+  }[];
 }
 
-export interface UpdateSalesOrderInput extends Partial<CreateSalesOrderInput> {
+export interface UpdateSalesOrderInput extends CreateSalesOrderInput {
   id: string;
 }
 
@@ -34,6 +36,8 @@ export interface SalesOrderVO {
   salesperson: SimpleUserVO;
   remarks: string;
   amount: string;
+  createdAt: Date;
+  updatedAt: Date;
 }
 
 export interface SalesOrderDetailVO extends SalesOrderVO {

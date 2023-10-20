@@ -1,6 +1,5 @@
-import { defineAPI } from "@/shared";
+import { defineQueryAPI, defineAPI, defineMutationAPI } from "@/shared";
 import * as API from "@nest-admin/server";
-import { defineQueryAPI } from "@/shared/lib/request";
 
 const api = {
   auth: {
