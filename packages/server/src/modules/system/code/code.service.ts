@@ -22,18 +22,16 @@ export class CodeService {
     }
     return _.padStart(number.toString(), 2, "0");
   }
+
   /**
    * 生成唯一的业务流水号
    * @param namespace
    */
   async generateCode(namespace: string) {
     const number = await this.getCurrentUniqueNumber(namespace);
-    const year = dayjs().format("YYYYMMDD");
-    const second = dayjs()
-      .set("year", 0)
-      .set("month", 0)
-      .set("date", 0)
-      .get("second");
-    return `${year}${second}${number}`;
+    const now = dayjs();
+    const seconds = now.diff(now.startOf("day"), "second");
+    const year = now.format("YYYYMMDD");
+    return `${year}${seconds}${number}`;
   }
 }

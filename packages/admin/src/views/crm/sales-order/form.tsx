@@ -9,7 +9,7 @@ import {
   ProFormInstance,
   ProFormTextArea,
 } from "@ant-design/pro-components";
-import { Button, Card, Form, Input, Space } from "antd";
+import { Button, Card, Form, Input, message, Space } from "antd";
 import { CustomerSelector } from "@/views/crm/components/CustomerSelector";
 import { ProFormUserSelector } from "@/shared/components/UserSelector";
 import React, { useRef, useState } from "react";
@@ -40,6 +40,7 @@ export function Component(props: any) {
       details: values.details.map((it) => ({
         ..._.pick(it, ["quantity", "price"]),
         product: _.pick(it.product, ["id"]),
+        id: values.id ? it.id : undefined,
       })),
     };
   };
@@ -81,10 +82,18 @@ export function Component(props: any) {
             ),
           }}
           onFinish={async (values) => {
-            await api.crm.salesOrder.create(convertValues(values));
-            navigate("/crm/sales-order/list", {
-              replace: true,
-            });
+            if (location.pathname === "/crm/sales-order/create") {
+              await api.crm.salesOrder.create(convertValues(values));
+            } else {
+              await api.crm.salesOrder.update(
+                convertValues({
+                  ...values,
+                  id: params.id!,
+                })
+              );
+            }
+            message.success("保存成功");
+            navigate("/crm/sales-order/list", { replace: true });
             return true;
           }}
         >

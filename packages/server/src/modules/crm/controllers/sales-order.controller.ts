@@ -71,13 +71,14 @@ export class SalesOrderController {
 
   @Post("update")
   async update(@TypedBody() input: UpdateSalesOrderInput) {
-    const salesOrder = await this.em.findOneOrFail(SalesOrder, input.id);
+    const salesOrder = await this.em.findOneOrFail(SalesOrder, input.id, {
+      populate: ["customer", "salesperson", "details", "details.product"],
+    });
     if (salesOrder.status !== OrderStatusEnum.SAVED)
       throw new InputException(
         "只有处于已保存未提交的销售单才可以修改销售单内容"
       );
-    this.em.assign(salesOrder, _.omit(input, ["id", "details"]));
-    salesOrder.details.set(input.details.map((it) => new SalesOrderItem(it)));
+    this.em.assign(salesOrder, _.omit(input, ["id"]));
     this.salesOrderService.computeOrderAmount(salesOrder);
     await this.em.flush();
   }

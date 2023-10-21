@@ -29,9 +29,9 @@ export function Component() {
           { dataIndex: "remarks", title: "备注", valueType: "textarea" },
           {
             title: "操作",
-            valueType: "",
+            valueType: "option",
             render: (dom, entity) => [
-              <Link to={`/crm/sales-order/${entity.id}`} key="detail">
+              <Link to={`/crm/sales-order/detail/${entity.id}`} key="detail">
                 详单
               </Link>,
               <Dropdown
@@ -41,7 +41,7 @@ export function Component() {
                     {
                       key: "edit",
                       label: (
-                        <Link to={`/crm/sales-order/${entity.id}/edit`}>
+                        <Link to={`/crm/sales-order/edit/${entity.id}`}>
                           编辑
                         </Link>
                       ),
