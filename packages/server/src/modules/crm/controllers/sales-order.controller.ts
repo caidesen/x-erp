@@ -91,6 +91,14 @@ export class SalesOrderController {
     salesOrder.status = OrderStatusEnum.SUBMITTED;
     await this.em.flush();
   }
+  @Post("reverseSubmit")
+  async reverseSubmit(@TypedBody() input: IdOnly) {
+    const salesOrder = await this.em.findOneOrFail(SalesOrder, input.id);
+    if (salesOrder.status !== OrderStatusEnum.SUBMITTED)
+      throw new InputException("不符合流程");
+    salesOrder.status = OrderStatusEnum.SAVED;
+    await this.em.flush();
+  }
 
   @Post("approve")
   async approve(@TypedBody() input: IdOnly) {
@@ -101,12 +109,30 @@ export class SalesOrderController {
     await this.em.flush();
   }
 
+  @Post("reverseApprove")
+  async reverseApprove(@TypedBody() input: IdOnly) {
+    const salesOrder = await this.em.findOneOrFail(SalesOrder, input.id);
+    if (salesOrder.status !== OrderStatusEnum.APPROVED)
+      throw new InputException("不符合流程");
+    salesOrder.status = OrderStatusEnum.SUBMITTED;
+    await this.em.flush();
+  }
+
   @Post("reject")
   async reject(@TypedBody() input: IdOnly) {
     const salesOrder = await this.em.findOneOrFail(SalesOrder, input.id);
     if (salesOrder.status !== OrderStatusEnum.SUBMITTED)
       throw new InputException("不符合流程");
     salesOrder.status = OrderStatusEnum.CANCELED;
+    await this.em.flush();
+  }
+
+  @Post("reverseReject")
+  async reverseReject(@TypedBody() input: IdOnly) {
+    const salesOrder = await this.em.findOneOrFail(SalesOrder, input.id);
+    if (salesOrder.status !== OrderStatusEnum.REJECTED)
+      throw new InputException("不符合流程");
+    salesOrder.status = OrderStatusEnum.SUBMITTED;
     await this.em.flush();
   }
 

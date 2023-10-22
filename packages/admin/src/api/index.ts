@@ -75,8 +75,17 @@ const api = {
         "crm/sales-order/update"
       ),
       submit: defineAPI<API.IdOnly, void>("crm/sales-order/submit"),
+      reverseSubmit: defineAPI<API.IdOnly, void>(
+        "crm/sales-order/reverseSubmit"
+      ),
       approve: defineAPI<API.IdOnly, void>("crm/sales-order/approve"),
+      reverseApprove: defineAPI<API.IdOnly, void>(
+        "crm/sales-order/reverseApprove"
+      ),
       reject: defineAPI<API.IdOnly, void>("crm/sales-order/reject"),
+      reverseReject: defineAPI<API.IdOnly, void>(
+        "crm/sales-order/reverseReject"
+      ),
       cancel: defineAPI<API.IdOnly, void>("crm/sales-order/cancel"),
     },
   },

@@ -10,10 +10,12 @@ import _ from "lodash";
 import { Button, Card, Table } from "antd";
 import { OrderStatusName } from "@/shared/constant/order-status";
 import { toBig } from "@/shared";
+import { moneyFormat } from "@/shared/lib/fmt";
+import { SalesOrderActionMenu } from "@/views/crm/sales-order/helper";
 
 export function Component() {
   const { id } = useParams<{ id: string }>();
-  const { data, isLoading } = api.crm.salesOrder.detail.useQuery(
+  const { data, isLoading, refetch } = api.crm.salesOrder.detail.useQuery(
     { id: id! },
     {
       enabled: !_.isNil(id),
@@ -24,18 +26,13 @@ export function Component() {
     <PageContainer onBack={() => navigate(-1)}>
       <Card>
         <FooterToolbar>
-          <Button type="primary">操作</Button>
+          {data && (
+            <SalesOrderActionMenu item={data} reload={refetch}>
+              <Button type="primary">操作</Button>
+            </SalesOrderActionMenu>
+          )}
         </FooterToolbar>
         <ProDescriptions
-          // extra={
-          //   <Dropdown
-          //     menu={{
-          //       items: [],
-          //     }}
-          //   >
-          //     <Button>操作</Button>
-          //   </Dropdown>
-          // }
           title="销售单"
           loading={isLoading}
           dataSource={data}
@@ -49,7 +46,6 @@ export function Component() {
             },
             { dataIndex: ["customer", "shortName"], title: "客户" },
             { dataIndex: ["salesperson", "nickname"], title: "业务员" },
-            { dataIndex: "amount", title: "金额", valueType: "money" },
             {
               dataIndex: "createdAt",
               title: "创建时间",
@@ -78,7 +74,7 @@ export function Component() {
                 </Table.Summary.Cell>
                 <Table.Summary.Cell index={0} colSpan={4} />
                 <Table.Summary.Cell index={1} colSpan={1}>
-                  ¥{toBig(data?.amount, "0").toFixed(2)}
+                  ¥{moneyFormat(data?.amount ?? "0")}
                 </Table.Summary.Cell>
               </Table.Summary.Row>
             );

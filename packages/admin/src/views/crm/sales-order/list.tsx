@@ -3,17 +3,18 @@ import {
   PageContainer,
   ProTable,
 } from "@ant-design/pro-components";
-import { api } from "@/api";
+import { api, API } from "@/api";
 import React from "react";
-import { Button, Dropdown } from "antd";
+import { Button } from "antd";
 import { Link } from "react-router-dom";
 import { OrderStatusName } from "@/shared/constant/order-status";
+import { SalesOrderActionMenu } from "@/views/crm/sales-order/helper";
 
 export function Component() {
   const actionRef = React.useRef<ActionType>();
   return (
     <PageContainer>
-      <ProTable
+      <ProTable<API.SalesOrderVO>
         rowKey="id"
         actionRef={actionRef}
         search={false}
@@ -34,39 +35,13 @@ export function Component() {
               <Link to={`/crm/sales-order/detail/${entity.id}`} key="detail">
                 详单
               </Link>,
-              <Dropdown
-                key="more"
-                menu={{
-                  items: [
-                    {
-                      key: "edit",
-                      label: (
-                        <Link to={`/crm/sales-order/edit/${entity.id}`}>
-                          编辑
-                        </Link>
-                      ),
-                    },
-                    {
-                      key: "submit",
-                      label: "提交",
-                    },
-                    {
-                      key: "approve",
-                      label: "审核",
-                    },
-                    {
-                      key: "reject",
-                      label: "驳回",
-                    },
-                    {
-                      key: "cancel",
-                      label: "取消",
-                    },
-                  ],
-                }}
+              <SalesOrderActionMenu
+                key="menu"
+                item={entity}
+                reload={() => actionRef.current?.reload()}
               >
                 <a>操作</a>
-              </Dropdown>,
+              </SalesOrderActionMenu>,
             ],
           },
         ]}
